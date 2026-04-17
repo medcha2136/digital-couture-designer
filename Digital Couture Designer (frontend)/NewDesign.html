@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>New Design</title>
+
+<style>
+body{font-family:Arial;background:#f4f7fa;padding:40px;}
+.box{background:white;padding:25px;width:300px;margin:auto;border-radius:10px;}
+input,button{width:100%;padding:10px;margin:10px 0;}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+
+<h3>New Design</h3>
+
+<input id="fabric" placeholder="Fabric">
+<input id="color" placeholder="Color">
+
+<button onclick="submit()">Submit</button>
+
+</div>
+
+<script>
+
+function submit(){
+
+let design={
+fabric:fabric.value,
+color:color.value
+};
+
+let arr=JSON.parse(localStorage.getItem("designs"))||[];
+arr.push(design);
+
+localStorage.setItem("designs",JSON.stringify(arr));
+
+alert("Design Saved");
+}
+
+</script>
+
+</body>
+</html>

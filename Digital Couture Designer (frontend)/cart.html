@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Cart - Digital Couture</title>
+
+
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:#f4f7fa;
+padding:40px;
+}
+
+h2{
+color:#2a9d8f;
+}
+
+/* Card */
+.card{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 6px 12px rgba(0,0,0,.1);
+margin-top:20px;
+}
+
+/* Floating Dock */
+.floating-dock{
+position:fixed;
+bottom:20px;
+left:50%;
+transform:translateX(-50%);
+background:#ffffff;
+padding:14px 35px;
+border-radius:50px;
+box-shadow:0 12px 30px rgba(0,0,0,.25);
+display:flex;
+gap:35px;
+z-index:3000;
+}
+
+.dock-item{
+position:relative;
+font-size:22px;
+cursor:pointer;
+color:#2a9d8f;
+transition:.3s;
+}
+
+.dock-item:hover{
+transform:translateY(-6px) scale(1.2);
+color:#21867a;
+}
+
+.dock-item span{
+position:absolute;
+bottom:45px;
+left:50%;
+transform:translateX(-50%);
+background:#2a9d8f;
+color:white;
+padding:6px 12px;
+border-radius:6px;
+font-size:13px;
+opacity:0;
+transition:.3s;
+white-space:nowrap;
+}
+
+.dock-item:hover span{
+opacity:1;
+bottom:55px;
+}
+</style>
+</head>
+
+<body>
+
+<h2>🛒 Your Cart</h2>
+
+<div class="card">
+No items in cart yet.
+</div>
+
+<!-- Floating Dock -->
+<div class="floating-dock">
+
+<div class="dock-item" onclick="goDashboard()">
+🏠<span>Home</span>
+</div>
+
+<div class="dock-item" onclick="goCart()">
+🛒<span>Cart</span>
+</div>
+
+<div class="dock-item" onclick="goWishlist()">
+❤️<span>Wishlist</span>
+</div>
+
+<div class="dock-item" onclick="goSettings()">
+⚙<span>Settings</span>
+</div>
+
+<div class="dock-item" onclick="goOrders()">
+📦<span>Orders</span>
+</div>
+
+</div>
+
+<script>
+
+// Protect page
+if(!localStorage.getItem("userPhone")){
+window.location.href="login.html";
+}
+
+// Navigation
+function goDashboard(){ window.location.href="dashboard.html"; }
+function goCart(){ window.location.href="cart.html"; }
+function goWishlist(){ window.location.href="wishlist.html"; }
+function goSettings(){ window.location.href="settings.html"; }
+function goOrders(){ window.location.href="orders.html"; }
+
+</script>
+
+</body>
+</html>

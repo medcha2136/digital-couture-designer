@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Digital Couture Designer - Dashboard</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:#f4f7fa;
+padding-top:80px; /* space for navbar */
+}
+
+/* ================= NAVBAR ================= */
+.navbar{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:70px;
+background:white;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 30px;
+box-shadow:0 4px 12px rgba(0,0,0,.1);
+z-index:5000;
+}
+
+/* Logo */
+.logo{
+font-size:20px;
+font-weight:bold;
+color:#2a9d8f;
+}
+
+/* Oval Search */
+.search-box{
+flex:1;
+display:flex;
+justify-content:center;
+}
+
+.search-box input{
+width:55%;
+max-width:500px;
+padding:12px 22px;
+border-radius:50px;
+border:none;
+outline:none;
+background:#f1f1f1;
+font-size:14px;
+box-shadow:0 4px 10px rgba(0,0,0,.05);
+transition:.3s;
+}
+
+.search-box input:focus{
+background:white;
+box-shadow:0 6px 18px rgba(0,0,0,.15);
+}
+
+/* Right Icons */
+.nav-right{
+display:flex;
+align-items:center;
+gap:25px;
+font-size:20px;
+cursor:pointer;
+color:#2a9d8f;
+}
+
+.nav-right div:hover{
+transform:scale(1.15);
+transition:.3s;
+}
+
+/* ================= LAYOUT ================= */
+.wrapper{
+display:flex;
+height:calc(100vh - 80px);
+}
+
+/* Sidebar */
+.sidebar{
+width:230px;
+background:#2a9d8f;
+color:white;
+padding:20px;
+}
+
+.profile{
+text-align:center;
+border-bottom:1px solid rgba(255,255,255,.3);
+padding-bottom:20px;
+}
+
+.menu div{
+padding:12px;
+margin:8px 0;
+cursor:pointer;
+border-radius:6px;
+}
+
+.menu div:hover{
+background:rgba(255,255,255,.2);
+}
+
+/* Main */
+.main{
+flex:1;
+padding:30px;
+}
+
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:25px;
+margin-top:20px;
+}
+
+.card{
+background:white;
+padding:25px;
+border-radius:12px;
+box-shadow:0 6px 12px rgba(0,0,0,.1);
+text-align:center;
+}
+
+.card:hover{
+transform:scale(1.05);
+transition:.3s;
+cursor:pointer;
+background:#f0fdfa;
+}
+
+/* ================= ACCOUNT PANEL ================= */
+.account-panel{
+position:fixed;
+top:0;
+right:-320px;
+width:300px;
+height:100%;
+background:white;
+box-shadow:-4px 0 10px rgba(0,0,0,.2);
+padding:25px;
+transition:.4s;
+z-index:6000;
+}
+
+.account-panel.active{
+right:0;
+}
+
+.close-btn{
+text-align:right;
+font-size:20px;
+cursor:pointer;
+}
+
+.account-item{
+margin:20px 0;
+padding:12px;
+background:#f4f7fa;
+border-radius:8px;
+}
+
+/* ================= FLOATING DOCK ================= */
+.floating-dock{
+position:fixed;
+bottom:20px;
+left:50%;
+transform:translateX(-50%);
+background:#ffffff;
+padding:14px 35px;
+border-radius:50px;
+box-shadow:0 12px 30px rgba(0,0,0,.25);
+display:flex;
+gap:35px;
+z-index:3000;
+}
+
+.dock-item{
+position:relative;
+font-size:22px;
+cursor:pointer;
+color:#2a9d8f;
+transition:.3s;
+}
+
+.dock-item:hover{
+transform:translateY(-6px) scale(1.2);
+color:#21867a;
+}
+
+.dock-item span{
+position:absolute;
+bottom:45px;
+left:50%;
+transform:translateX(-50%);
+background:#2a9d8f;
+color:white;
+padding:6px 12px;
+border-radius:6px;
+font-size:13px;
+opacity:0;
+transition:.3s;
+}
+
+.dock-item:hover span{
+opacity:1;
+bottom:55px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<div class="navbar">
+
+<div class="logo">Digital Couture Designer</div>
+
+<div class="search-box">
+<input type="text" placeholder="Search designs, styles, fabrics...">
+</div>
+
+<div class="nav-right">
+<div onclick="openCamera()">📷</div>
+<div onclick="account()">👤</div>
+</div>
+
+</div>
+
+<div class="wrapper">
+
+<!-- Sidebar -->
+<div class="sidebar">
+<div class="profile">
+<h3 id="user"></h3>
+<p>Customer</p>
+</div>
+
+<div class="menu">
+<div>🏠 Dashboard</div>
+<div onclick="newDesign()">🎨 New Design</div>
+<div onclick="measurements()">📏 Measurements</div>
+<div onclick="history()">📜 History</div>
+<div onclick="account()">👤 Account</div>
+<div onclick="logout()">🚪 Logout</div>
+</div>
+</div>
+
+<!-- Main -->
+<div class="main">
+<h2>Welcome to Digital Couture Designer</h2>
+
+<div class="cards">
+<div class="card" onclick="newDesign()">
+<h3>🎨 New Design</h3>
+</div>
+
+<div class="card" onclick="measurements()">
+<h3>📏 Measurements</h3>
+</div>
+
+<div class="card" onclick="history()">
+<h3>📜 History</h3>
+</div>
+</div>
+</div>
+
+</div>
+
+<!-- Account Panel -->
+<div class="account-panel" id="accountPanel">
+
+<div class="close-btn" onclick="closeAccount()">✖</div>
+
+<h3>👤 Account</h3>
+
+<div class="account-item">
+<b>📱 Phone:</b><br>
+<span id="accPhone"></span>
+</div>
+
+<div class="account-item">
+<b>📧 Email:</b><br>
+support@digitalcouture.com
+</div>
+
+<div class="account-item">
+<b>🛠 Help Desk:</b><br>
++91 90000 00000
+</div>
+
+</div>
+
+<!-- Floating Dock -->
+<div class="floating-dock">
+<div class="dock-item" onclick="location.href='dashboard.html'">🏠<span>Home</span></div>
+<div class="dock-item" onclick="goCart()">🛒<span>Cart</span></div>
+<div class="dock-item" onclick="goWishlist()">❤️<span>Wishlist</span></div>
+<div class="dock-item" onclick="goSettings()">⚙<span>Settings</span></div>
+<div class="dock-item" onclick="goOrders()">📦<span>Orders</span></div>
+</div>
+
+<script>
+
+/* Protect page */
+if(!localStorage.getItem("userPhone")){
+window.location.href="login.html";
+}
+
+document.getElementById("user").innerText =
+"+91 "+localStorage.getItem("userPhone");
+
+/* Navigation */
+function newDesign(){ location.href="newdesign.html"; }
+function measurements(){ location.href="measurements.html"; }
+function history(){ location.href="history.html"; }
+
+function goCart(){ location.href="cart.html"; }
+function goWishlist(){ location.href="wishlist.html"; }
+function goSettings(){ location.href="settings.html"; }
+function goOrders(){ location.href="orders.html"; }
+
+/* Account Panel */
+function account(){
+document.getElementById("accountPanel").classList.add("active");
+document.getElementById("accPhone").innerText =
+"+91 "+localStorage.getItem("userPhone");
+}
+
+function closeAccount(){
+document.getElementById("accountPanel").classList.remove("active");
+}
+
+function openCamera(){
+alert("Camera feature coming soon 📷");
+}
+
+function logout(){
+localStorage.clear();
+location.href="login.html";
+}
+
+</script>
+
+</body>
+</html>

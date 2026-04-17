@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Digital Couture Designer- Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+<style>
+body{
+margin:0;
+font-family:Segoe UI, Arial;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+
+/* NEW LOGO IMAGE BACKGROUND */
+background:
+linear-gradient(rgba(241,247,245,.75),rgba(241,247,245,.75)),
+url(" final logo.jpg");
+
+background-size:110%;
+background-position:center;
+background-repeat:no-repeat;
+}
+
+.box{
+background:white;
+padding:45px;
+width:420px;
+border-radius:14px;
+box-shadow:0 12px 30px rgba(0,0,0,.15);
+}
+
+h2{
+text-align:center;
+color:#2a9d8f;
+margin-bottom:25px;
+font-family:'Great Vibes', cursive;
+font-size:42px;
+font-weight:normal;
+letter-spacing:1px;
+}
+
+input,button{
+width:100%;
+padding:14px;
+margin:12px 0;
+border-radius:8px;
+border:1px solid #ccc;
+font-size:16px;
+}
+
+button{
+background:#2a9d8f;
+color:white;
+border:none;
+cursor:pointer;
+transition:.3s;
+}
+
+button:hover{
+background:#21867a;
+}
+
+#otpBox{
+display:none;
+}
+
+p{
+text-align:center;
+color:red;
+margin-top:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+
+<h2>Digital Couture Designer</h2>
+
+<input type="tel" id="phone" placeholder="Enter Phone Number">
+
+<button onclick="sendOTP()">Send OTP</button>
+
+<div id="otpBox">
+<input type="number" id="otp" placeholder="Enter OTP">
+<button onclick="verifyOTP()">Verify OTP</button>
+</div>
+
+<p id="msg"></p>
+
+</div>
+
+<script>
+
+let generatedOTP="";
+
+function sendOTP(){
+
+let phone=document.getElementById("phone").value;
+
+if(phone.length!=10){
+document.getElementById("msg").innerText="Enter valid 10 digit number";
+return;
+}
+
+generatedOTP=Math.floor(1000+Math.random()*9000);
+
+alert("Demo OTP: "+generatedOTP);
+
+document.getElementById("otpBox").style.display="block";
+document.getElementById("msg").innerText="OTP Sent";
+}
+
+function verifyOTP(){
+
+let otp=document.getElementById("otp").value;
+
+if(otp==generatedOTP){
+localStorage.setItem("userPhone",document.getElementById("phone").value);
+window.location.href="dashboard.html";
+}
+else{
+document.getElementById("msg").innerText="Invalid OTP";
+}
+}
+
+</script>
+
+</body>
+</html>

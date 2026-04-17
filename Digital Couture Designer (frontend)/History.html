@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>History</title>
+
+<style>
+body{font-family:Arial;background:#f4f7fa;padding:40px;}
+.card{background:white;padding:15px;margin:10px;border-radius:10px;}
+</style>
+</head>
+
+<body>
+
+<h3>Design History</h3>
+
+<div id="list"></div>
+
+<script>
+
+let designs=JSON.parse(localStorage.getItem("designs"))||[];
+
+designs.forEach(d=>{
+list.innerHTML+=`<div class="card">
+Fabric: ${d.fabric}<br>
+Color: ${d.color}
+</div>`;
+});
+
+</script>
+
+</body>
+</html>
