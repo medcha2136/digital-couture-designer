@@ -1,26 +1,25 @@
 package com.couture.backend.controller;
 
+import com.couture.backend.entity.Measurement;
+import com.couture.backend.repository.MeasurementRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import java.util.*;
 
 @RestController
-@RequestMapping("/measurements")
+@RequestMapping("/api/measurements")
 @CrossOrigin(origins = "*")
 public class MeasurementController {
 
-    private List<Map<String, Object>> measurements = new ArrayList<>();
+    @Autowired
+    private MeasurementRepository repo;
 
     @PostMapping
-    public Map<String, Object> saveMeasurement(@RequestBody Map<String, Object> body) {
-
-        body.put("id", measurements.size() + 1);
-        measurements.add(body);
-
-        return body;
+    public Measurement saveMeasurement(@RequestBody Measurement m) {
+        return repo.save(m);
     }
 
-    @GetMapping("/{userId}")
-    public List<Map<String, Object>> getMeasurements(@PathVariable int userId) {
-        return measurements;
+    @GetMapping
+    public java.util.List<Measurement> getAllMeasurements() {
+        return repo.findAll();
     }
 }

@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Products - Digital Couture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --brand: #146c63;
+    --brand-dark: #0f574f;
+    --ink: #1f2b30;
+    --muted: #62717a;
+    --bg: #f3f8fa;
+    --line: #dbe7ea;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: "Poppins", "Segoe UI", sans-serif;
+    background:
+      radial-gradient(circle at 10% 10%, #d8eeea 0%, transparent 28%),
+      radial-gradient(circle at 88% 85%, #dce9fa 0%, transparent 30%),
+      var(--bg);
+    color: var(--ink);
+  }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(243, 248, 250, 0.94);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .topbar-inner {
+    width: min(1150px, 94vw);
+    margin: 0 auto;
+    min-height: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .title {
+    font-weight: 600;
+    font-size: clamp(1.1rem, 2.3vw, 1.5rem);
+    color: var(--brand-dark);
+  }
+
+  .top-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--ink);
+    border-radius: 999px;
+    padding: 8px 13px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  .btn.primary {
+    border: 0;
+    color: #fff;
+    background: linear-gradient(90deg, var(--brand), var(--brand-dark));
+  }
+
+  .container {
+    width: min(1150px, 94vw);
+    margin: 24px auto 40px;
+  }
+
+  .filters {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 12px;
+    margin-bottom: 14px;
+    display: grid;
+    grid-template-columns: 1.5fr repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .filters input,
+  .filters select {
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font: inherit;
+    background: #fff;
+    color: var(--ink);
+  }
+
+  .result-note {
+    margin: 0 0 10px;
+    color: var(--muted);
+    font-size: 0.92rem;
+  }
+
+  .result-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+
+  .clear-btn {
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--ink);
+    border-radius: 999px;
+    padding: 7px 12px;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 0 0 12px;
+  }
+
+  .chip {
+    border: 1px solid #c7dee2;
+    background: #ecf6f8;
+    color: #204048;
+    border-radius: 999px;
+    padding: 5px 10px;
+    font-size: 0.84rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .chip button {
+    border: 0;
+    background: transparent;
+    color: #204048;
+    cursor: pointer;
+    font-size: 0.95rem;
+    line-height: 1;
+    padding: 0;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 12px 26px rgba(15, 87, 79, 0.08);
+  }
+
+  .card img {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .content {
+    padding: 12px 14px 14px;
+  }
+
+  .content h3 {
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  .price {
+    margin: 8px 0 12px;
+    color: var(--brand-dark);
+    font-weight: 600;
+  }
+
+  .content button {
+    border: 0;
+    border-radius: 10px;
+    background: linear-gradient(90deg, var(--brand), var(--brand-dark));
+    color: #fff;
+    padding: 10px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .actions-row {
+    display: grid;
+    grid-template-columns: 1fr 42px;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .wishlist-btn {
+    border: 1px solid var(--line);
+    background: #fff;
+    border-radius: 10px;
+    height: 40px;
+    width: 42px;
+    cursor: pointer;
+    font-size: 20px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #62717a;
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+
+  .wishlist-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px rgba(15, 87, 79, 0.12);
+  }
+
+  .wishlist-btn.active {
+    color: #ff3f6c;
+  }
+
+  .toast {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    background: #0e3f3a;
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 10px;
+    opacity: 0;
+    transition: opacity .2s ease;
+    pointer-events: none;
+  }
+
+  .toast.show { opacity: 1; }
+
+  @media (max-width: 900px) {
+    .filters { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 620px) {
+    .filters { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="title" id="title"></div>
+      <div class="top-actions">
+        <button class="btn" onclick="location.href='Dashboard.html'">Dashboard</button>
+        <button class="btn" onclick="location.href='History.html'">History</button>
+        <button class="btn" onclick="location.href='wishlist.html'">Wishlist</button>
+        <button class="btn primary" onclick="location.href='cart.html'">Go to Cart</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="filters">
+      <input type="text" id="searchInput" placeholder="Search products...">
+      <select id="categoryFilter">
+        <option value="All">All Categories</option>
+      </select>
+      <select id="priceFilter">
+        <option value="all">All Prices</option>
+        <option value="0-1500">Under INR 1,500</option>
+        <option value="1500-2500">INR 1,500 - 2,500</option>
+        <option value="2500-999999">Above INR 2,500</option>
+      </select>
+      <select id="sortFilter">
+        <option value="default">Sort: Recommended</option>
+        <option value="priceAsc">Price: Low to High</option>
+        <option value="priceDesc">Price: High to Low</option>
+        <option value="nameAsc">Name: A to Z</option>
+      </select>
+    </section>
+    <div class="result-bar">
+      <p class="result-note" id="resultCount"></p>
+      <button class="clear-btn" id="clearFiltersBtn" type="button">Clear Filters</button>
+    </div>
+    <div class="chips" id="activeChips"></div>
+    <div class="grid" id="grid"></div>
+  </main>
+
+  <div class="toast" id="toast">Added to cart</div>
+
+  <script>
+    if (!localStorage.getItem("userPhone")) {
+      window.location.href = "login.html";
+    }
+
+    const category = localStorage.getItem("selectedCategory") || "Ethnic Wear";
+    document.getElementById("title").innerText = category + " Collection";
+
+    const productMap = {
+      "Ethnic Wear": [
+        { img: "lehanga.jpeg", name: "Floral Lehenga", price: 2999 },
+        { img: "half saree.jpeg", name: "Classic Half Saree", price: 2199 }
+      ],
+      "Casual Wear": [
+        { img: "kurthi.jpeg", name: "Everyday Kurti", price: 999 },
+        { img: "kurthi.jpeg", name: "Printed Kurti", price: 1199 }
+      ],
+      "Party Wear": [
+        { img: "sharara.jpeg", name: "Evening Sharara", price: 2499 },
+        { img: "lehanga.jpeg", name: "Occasion Lehenga", price: 3399 }
+      ],
+      "Traditional": [
+        { img: "half saree.jpeg", name: "Festival Half Saree", price: 2399 },
+        { img: "lehanga.jpeg", name: "Traditional Set", price: 2899 }
+      ],
+      "Designer": [
+        { img: "sharara.jpeg", name: "Designer Sharara", price: 2699 },
+        { img: "lehanga.jpeg", name: "Designer Lehenga", price: 3599 }
+      ]
+    };
+
+    const allProducts = [];
+    Object.entries(productMap).forEach(([catName, items]) => {
+      items.forEach(item => allProducts.push({ ...item, category: catName }));
+    });
+
+    let filteredProducts = [];
+    let wishlistItems = JSON.parse(localStorage.getItem("wishlistItems") || "[]");
+    const grid = document.getElementById("grid");
+    const searchInput = document.getElementById("searchInput");
+    const categoryFilter = document.getElementById("categoryFilter");
+    const priceFilter = document.getElementById("priceFilter");
+    const sortFilter = document.getElementById("sortFilter");
+    const resultCount = document.getElementById("resultCount");
+    const activeChips = document.getElementById("activeChips");
+    const clearFiltersBtn = document.getElementById("clearFiltersBtn");
+
+    const priceLabelMap = {
+      "0-1500": "Under INR 1,500",
+      "1500-2500": "INR 1,500 - 2,500",
+      "2500-999999": "Above INR 2,500"
+    };
+
+    Object.keys(productMap).forEach(cat => {
+      const option = document.createElement("option");
+      option.value = cat;
+      option.textContent = cat;
+      categoryFilter.appendChild(option);
+    });
+
+    categoryFilter.value = category;
+
+    searchInput.addEventListener("input", renderProducts);
+    categoryFilter.addEventListener("change", () => {
+      const selected = categoryFilter.value;
+      document.getElementById("title").innerText = (selected === "All" ? "All Products" : selected + " Collection");
+      renderProducts();
+    });
+    priceFilter.addEventListener("change", renderProducts);
+    sortFilter.addEventListener("change", renderProducts);
+    clearFiltersBtn.addEventListener("click", clearFilters);
+
+    function clearFilters() {
+      searchInput.value = "";
+      categoryFilter.value = "All";
+      priceFilter.value = "all";
+      sortFilter.value = "default";
+      document.getElementById("title").innerText = "All Products";
+      renderProducts();
+    }
+
+    function removeFilter(type) {
+      if (type === "search") searchInput.value = "";
+      if (type === "category") categoryFilter.value = "All";
+      if (type === "price") priceFilter.value = "all";
+      if (type === "sort") sortFilter.value = "default";
+      const selected = categoryFilter.value;
+      document.getElementById("title").innerText = (selected === "All" ? "All Products" : selected + " Collection");
+      renderProducts();
+    }
+
+    function renderChips(query, selectedCategory, selectedPrice, selectedSort) {
+      const chips = [];
+      if (query) chips.push({ type: "search", label: `Search: ${query}` });
+      if (selectedCategory !== "All") chips.push({ type: "category", label: `Category: ${selectedCategory}` });
+      if (selectedPrice !== "all") chips.push({ type: "price", label: `Price: ${priceLabelMap[selectedPrice]}` });
+      if (selectedSort !== "default") {
+        const sortLabel = sortFilter.options[sortFilter.selectedIndex].text.replace("Sort: ", "");
+        chips.push({ type: "sort", label: `Sort: ${sortLabel}` });
+      }
+
+      if (chips.length === 0) {
+        activeChips.innerHTML = "";
+        return;
+      }
+
+      activeChips.innerHTML = chips.map(c => `
+        <span class="chip">
+          ${c.label}
+          <button type="button" onclick="removeFilter('${c.type}')" aria-label="Remove ${c.label}">x</button>
+        </span>
+      `).join("");
+    }
+
+    function renderProducts() {
+      const query = searchInput.value.trim().toLowerCase();
+      const selectedCategory = categoryFilter.value;
+      const selectedPrice = priceFilter.value;
+      const selectedSort = sortFilter.value;
+      renderChips(query, selectedCategory, selectedPrice, selectedSort);
+
+      filteredProducts = allProducts.filter(p => {
+        const queryMatch = p.name.toLowerCase().includes(query) || p.category.toLowerCase().includes(query);
+        const categoryMatch = selectedCategory === "All" || p.category === selectedCategory;
+
+        let priceMatch = true;
+        if (selectedPrice !== "all") {
+          const [min, max] = selectedPrice.split("-").map(Number);
+          priceMatch = p.price >= min && p.price <= max;
+        }
+
+        return queryMatch && categoryMatch && priceMatch;
+      });
+
+      if (selectedSort === "priceAsc") {
+        filteredProducts.sort((a, b) => a.price - b.price);
+      } else if (selectedSort === "priceDesc") {
+        filteredProducts.sort((a, b) => b.price - a.price);
+      } else if (selectedSort === "nameAsc") {
+        filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
+      }
+
+      grid.innerHTML = "";
+
+      if (filteredProducts.length === 0) {
+        resultCount.innerText = "No products found for the selected filters.";
+        grid.innerHTML = `<article class="card"><div class="content"><h3>No matching products</h3><p class="price">Try a different search or filter.</p></div></article>`;
+        return;
+      }
+
+      resultCount.innerText = `${filteredProducts.length} product(s) found`;
+
+      filteredProducts.forEach((p, index) => {
+        const wish = isWishlisted(p);
+        grid.innerHTML += `
+          <article class="card">
+            <img src="${p.img}" alt="${p.name}">
+            <div class="content">
+              <h3>${p.name}</h3>
+              <p class="price">INR ${p.price}</p>
+              <div class="actions-row">
+                <button type="button" onclick="addToCart(${index})">Add to Cart</button>
+                <button
+                  type="button"
+                  class="wishlist-btn ${wish ? "active" : ""}"
+                  onclick="toggleWishlist(${index})"
+                  aria-label="Toggle Wishlist"
+                >${wish ? "&#10084;" : "&#9825;"}</button>
+              </div>
+            </div>
+          </article>
+        `;
+      });
+    }
+
+    function getWishlistIndex(item) {
+      return wishlistItems.findIndex(w => w.name === item.name && w.category === item.category);
+    }
+
+    function isWishlisted(item) {
+      return getWishlistIndex(item) !== -1;
+    }
+
+    function toggleWishlist(index) {
+      const item = filteredProducts[index];
+      const wishlistItem = {
+        name: item.name,
+        image: item.img,
+        price: item.price,
+        category: item.category
+      };
+
+      const existingIndex = getWishlistIndex(wishlistItem);
+      if (existingIndex !== -1) {
+        wishlistItems.splice(existingIndex, 1);
+        showToast("Removed from wishlist");
+      } else {
+        wishlistItems.push(wishlistItem);
+        showToast("Added to wishlist");
+      }
+
+      localStorage.setItem("wishlistItems", JSON.stringify(wishlistItems));
+      renderProducts();
+    }
+
+    function addToCart(index) {
+      const item = {
+        ...filteredProducts[index],
+        qty: 1,
+        addedAt: new Date().toLocaleString()
+      };
+
+      const cartItems = JSON.parse(localStorage.getItem("cartItems") || "[]");
+      const existing = cartItems.find(ci => ci.name === item.name);
+
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cartItems.push(item);
+      }
+
+      localStorage.setItem("cartItems", JSON.stringify(cartItems));
+      showToast("Added to cart");
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.innerText = message;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 1600);
+    }
+
+    window.removeFilter = removeFilter;
+    window.toggleWishlist = toggleWishlist;
+    renderProducts();
+  </script>
+</body>
+</html>

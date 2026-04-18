@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Settings</title>
+
+<style>
+:root{
+  --primary:#2a9d8f;
+  --bg:#f4f7fa;
+  --card:#ffffff;
+}
+
+body{
+  margin:0;
+  font-family: Arial;
+  background:var(--bg);
+}
+
+/* HEADER */
+.header{
+  background:#fff;
+  padding:18px;
+  font-size:20px;
+  font-weight:bold;
+  color:var(--primary);
+  text-align:center;
+  box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* CONTAINER */
+.container{
+  max-width:900px;
+  margin:20px auto;
+  padding:10px;
+}
+
+/* CARD */
+.card{
+  background:var(--card);
+  border-radius:12px;
+  padding:20px;
+  margin-bottom:18px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* PROFILE */
+.profile{
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+
+.avatar{
+  width:70px;
+  height:70px;
+  border-radius:50%;
+  background:var(--primary);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  font-weight:bold;
+  overflow:hidden;
+  cursor:pointer;
+}
+
+.avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* INPUT */
+input{
+  width:100%;
+  padding:10px;
+  margin:6px 0;
+  border-radius:6px;
+  border:1px solid #ccc;
+}
+
+/* BUTTON */
+.btn{
+  padding:10px 14px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+.btn-primary{
+  background:var(--primary);
+  color:#fff;
+}
+
+.btn-danger{
+  background:var(--primary);
+  color:#fff;
+}
+
+/* ADDRESS */
+.address-box{
+  background:#f1f1f1;
+  padding:10px;
+  border-radius:8px;
+  margin-top:10px;
+}
+
+.toggle{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+/* SWITCH */
+.switch{
+  width:40px;
+  height:20px;
+  background:#ccc;
+  border-radius:20px;
+  position:relative;
+  cursor:pointer;
+}
+
+.switch::before{
+  content:"";
+  width:16px;
+  height:16px;
+  background:#fff;
+  border-radius:50%;
+  position:absolute;
+  top:2px;
+  left:2px;
+  transition:0.3s;
+}
+
+.switch.active{
+  background:var(--primary);
+}
+
+.switch.active::before{
+  left:22px;
+}
+
+.hidden{
+  display:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">Settings</div>
+
+<div class="container">
+
+  <!-- PROFILE -->
+  <div class="card">
+    <h3 onclick="toggleProfile()" style="cursor:pointer;">👤 My Profile ▼</h3>
+
+    <div id="profileBox" class="hidden">
+
+      <div class="profile">
+        <div class="avatar" id="avatar" onclick="toggleProfile()"></div>
+        <input type="file" id="profilePic" accept="image/*">
+      </div>
+
+      <input type="text" id="name" placeholder="Enter Name">
+      <input type="email" id="email" placeholder="Enter Email">
+
+      <button class="btn btn-primary" onclick="saveProfile()">Save Profile</button>
+
+    </div>
+  </div>
+
+  <!-- ADDRESS -->
+  <div class="card">
+    <h3>My Addresses</h3>
+
+    <div id="addressList"></div>
+
+    <button class="btn btn-primary" onclick="toggleForm()">+ Add Address</button>
+
+    <div id="formBox" class="hidden">
+      <input type="text" id="aName" placeholder="Full Name">
+      <input type="text" id="aAddress" placeholder="Full Address">
+      <input type="text" id="aPhone" placeholder="Phone Number">
+      <button class="btn btn-primary" onclick="saveAddress()">Save Address</button>
+    </div>
+  </div>
+
+  <!-- NOTIFICATIONS -->
+  <div class="card">
+    <div class="toggle">
+      <span>Notifications</span>
+      <div id="notifSwitch" class="switch" onclick="toggleNotif()"></div>
+    </div>
+  </div>
+
+  <!-- LOGOUT -->
+  <div class="card">
+    <button class="btn btn-danger" onclick="logout()">Logout</button>
+  </div>
+
+</div>
+
+<script>
+
+// LOAD PROFILE
+let name = localStorage.getItem("userName") || "";
+let email = localStorage.getItem("userEmail") || "";
+let photo = localStorage.getItem("profilePhoto");
+
+document.getElementById("name").value = name;
+document.getElementById("email").value = email;
+
+// AVATAR
+function loadAvatar(){
+  let avatar = document.getElementById("avatar");
+  if(photo){
+    avatar.innerHTML = `<img src="${photo}">`;
+  } else {
+    avatar.innerText = name ? name.charAt(0) : "U";
+  }
+}
+loadAvatar();
+
+// TOGGLE PROFILE
+function toggleProfile(){
+  document.getElementById("profileBox").classList.toggle("hidden");
+}
+
+// SAVE PROFILE
+function saveProfile(){
+  let nameVal = document.getElementById("name").value;
+  let emailVal = document.getElementById("email").value;
+
+  localStorage.setItem("userName", nameVal);
+  localStorage.setItem("userEmail", emailVal);
+
+  alert("Profile Saved");
+  loadAvatar();
+}
+
+// PROFILE PHOTO
+document.getElementById("profilePic").addEventListener("change", function(e){
+  let file = e.target.files[0];
+  let reader = new FileReader();
+
+  reader.onload = function(event){
+    localStorage.setItem("profilePhoto", event.target.result);
+    location.reload();
+  }
+
+  reader.readAsDataURL(file);
+});
+
+// ADDRESS
+let addresses = JSON.parse(localStorage.getItem("addresses")) || [];
+
+function renderAddresses(){
+  let container = document.getElementById("addressList");
+  container.innerHTML = "";
+
+  addresses.forEach((a,index)=>{
+    container.innerHTML += `
+      <div class="address-box">
+        <strong>${a.name}</strong><br>
+        ${a.address}<br>
+        📞 ${a.phone}<br>
+        <button class="btn btn-danger" onclick="deleteAddress(${index})">Delete</button>
+      </div>
+    `;
+  });
+}
+
+function toggleForm(){
+  document.getElementById("formBox").classList.toggle("hidden");
+}
+
+function saveAddress(){
+  let name = document.getElementById("aName").value;
+  let address = document.getElementById("aAddress").value;
+  let phone = document.getElementById("aPhone").value;
+
+  if(!name || !address || !phone){
+    alert("Fill all fields");
+    return;
+  }
+
+  addresses.push({name,address,phone});
+  localStorage.setItem("addresses", JSON.stringify(addresses));
+
+  renderAddresses();
+  toggleForm();
+}
+
+function deleteAddress(index){
+  addresses.splice(index,1);
+  localStorage.setItem("addresses", JSON.stringify(addresses));
+  renderAddresses();
+}
+
+// NOTIFICATIONS
+let notif = localStorage.getItem("notifications") === "true";
+let switchBtn = document.getElementById("notifSwitch");
+
+if(notif) switchBtn.classList.add("active");
+
+function toggleNotif(){
+  switchBtn.classList.toggle("active");
+  localStorage.setItem("notifications", switchBtn.classList.contains("active"));
+}
+
+// LOGOUT
+function logout(){
+  localStorage.clear();
+  window.location.href = "login.html";
+}
+
+// INIT
+renderAddresses();
+
+</script>
+
+</body>
+</html>

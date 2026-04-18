@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout - Digital Couture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --brand: #146c63;
+    --brand-dark: #0f574f;
+    --ink: #1f2b30;
+    --muted: #62717a;
+    --bg: #f3f8fa;
+    --line: #dbe7ea;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: "Poppins", "Segoe UI", sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+  }
+
+  .topbar {
+    border-bottom: 1px solid var(--line);
+    background: #fff;
+  }
+
+  .topbar-inner {
+    width: min(1120px, 94vw);
+    margin: 0 auto;
+    min-height: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .title {
+    margin: 0;
+    color: var(--brand-dark);
+    font-size: clamp(1.1rem, 2.1vw, 1.45rem);
+  }
+
+  .links {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    border: 1px solid var(--line);
+    background: #fff;
+    border-radius: 999px;
+    padding: 8px 13px;
+    cursor: pointer;
+    font-weight: 500;
+    font-family: inherit;
+  }
+
+  .btn.primary {
+    background: linear-gradient(90deg, var(--brand), var(--brand-dark));
+    color: #fff;
+    border: 0;
+  }
+
+  .container {
+    width: min(1120px, 94vw);
+    margin: 22px auto 40px;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 1.15fr .85fr;
+    gap: 16px;
+  }
+
+  .card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 14px;
+  }
+
+  .card h3 {
+    margin: 0 0 12px;
+    color: var(--brand-dark);
+    font-size: 1rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .field.full {
+    grid-column: 1 / -1;
+  }
+
+  .field label {
+    margin-bottom: 5px;
+    color: var(--muted);
+    font-size: 0.88rem;
+  }
+
+  .field input,
+  .field textarea {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font: inherit;
+    resize: vertical;
+  }
+
+  .field input:focus,
+  .field textarea:focus {
+    outline: 3px solid rgba(20, 108, 99, 0.2);
+    border-color: var(--brand);
+  }
+
+  .save-address-btn,
+  .place-order-btn {
+    width: 100%;
+    border: 0;
+    border-radius: 10px;
+    padding: 11px 1px;
+    background: linear-gradient(90deg, var(--brand), var(--brand-dark));
+    color: #fff;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: filter .2s ease, transform .2s ease;
+    margin-top: 18px;
+  }
+
+  .save-address-btn:hover,
+  .place-order-btn:hover {
+    filter: brightness(1.05);
+    transform: translateY(-1px);
+  }
+
+  .payment-list {
+    display: grid;
+    gap: 8px;
+  }
+
+  .payment-option {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .payment-option input {
+    accent-color: var(--brand);
+  }
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 8px 0;
+    color: var(--muted);
+  }
+
+  .summary-row.total {
+    color: var(--ink);
+    font-weight: 600;
+    border-top: 1px solid var(--line);
+    padding-top: 10px;
+    margin-top: 12px;
+  }
+
+  .status {
+    margin-top: 10px;
+    min-height: 20px;
+    color: var(--brand-dark);
+    font-size: 0.9rem;
+  }
+
+  .error {
+    margin-top: 8px;
+    color: #b54242;
+    font-size: 0.88rem;
+    min-height: 18px;
+  }
+
+  .empty {
+    text-align: center;
+    color: var(--muted);
+    padding: 24px 12px;
+  }
+
+  @media (max-width: 920px) {
+    .layout { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 620px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <h1 class="title">Checkout</h1>
+      <div class="links">
+        <button class="btn" onclick="location.href='cart.html'">Back to Cart</button>
+        <button class="btn" onclick="location.href='Dashboard.html'">Dashboard</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="layout">
+      <section>
+        <article class="card">
+          <h3>Address</h3>
+          <div class="grid">
+            <div class="field">
+              <label for="fullName">Full Name</label>
+              <input id="fullName" type="text" placeholder="Enter full name">
+            </div>
+            <div class="field">
+              <label for="phone">Phone Number</label>
+              <input id="phone" type="tel" placeholder="Enter phone number">
+            </div>
+            <div class="field full">
+              <label for="addressLine">Address Line</label>
+              <textarea id="addressLine" rows="3" placeholder="House no, street, landmark"></textarea>
+            </div>
+            <div class="field">
+              <label for="city">City</label>
+              <input id="city" type="text" placeholder="Enter city">
+            </div>
+            <div class="field">
+              <label for="pincode">Pincode</label>
+              <input id="pincode" type="text" placeholder="Enter pincode">
+            </div>
+          </div>
+          <button class="save-address-btn" type="button" onclick="saveAddress()">Save Address</button>
+          <p class="status" id="addressStatus"></p>
+        </article>
+
+        <article class="card" style="margin-top:16px;">
+          <h3>Payment</h3>
+          <div class="payment-list">
+            <label class="payment-option">
+              <input type="radio" name="payment" value="Cash on Delivery">
+              <span>Cash on Delivery (COD)</span>
+            </label>
+            <label class="payment-option">
+              <input type="radio" name="payment" value="UPI">
+              <span>UPI</span>
+            </label>
+            <label class="payment-option">
+              <input type="radio" name="payment" value="Card Payment">
+              <span>Card Payment</span>
+            </label>
+          </div>
+        </article>
+      </section>
+
+      <aside>
+        <article class="card">
+          <h3>Order Summary</h3>
+          <div id="summaryWrap"></div>
+          <p class="error" id="checkoutError"></p>
+          <button class="place-order-btn" type="button" onclick="placeOrder()">Place Order</button>
+        </article>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    if (!localStorage.getItem("userPhone")) {
+      window.location.href = "login.html";
+    }
+
+    let cartItems = JSON.parse(localStorage.getItem("cartItems") || "[]");
+    const summaryWrap = document.getElementById("summaryWrap");
+    const checkoutError = document.getElementById("checkoutError");
+    const addressStatus = document.getElementById("addressStatus");
+
+    function renderSummary() {
+      if (cartItems.length === 0) {
+        summaryWrap.innerHTML = '<p class="empty">Your cart is empty.</p>';
+        return;
+      }
+
+      const itemCount = cartItems.reduce((sum, i) => sum + Number(i.qty || 0), 0);
+      const total = cartItems.reduce((sum, i) => sum + Number(i.price || 0) * Number(i.qty || 0), 0);
+
+      summaryWrap.innerHTML = `
+        <div class="summary-row"><span>Total items</span><span>${itemCount}</span></div>
+        <div class="summary-row"><span>Total price</span><span>INR ${total}</span></div>
+        <div class="summary-row total"><span>Payable</span><span>INR ${total}</span></div>
+      `;
+    }
+
+    function getAddressPayload() {
+      return {
+        fullName: document.getElementById("fullName").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        addressLine: document.getElementById("addressLine").value.trim(),
+        city: document.getElementById("city").value.trim(),
+        pincode: document.getElementById("pincode").value.trim()
+      };
+    }
+
+    function validateAddress(address) {
+      if (!address.fullName || !address.phone || !address.addressLine || !address.city || !address.pincode) {
+        return "Please fill all address fields.";
+      }
+      if (!/^\d{10}$/.test(address.phone)) {
+        return "Phone number must be 10 digits.";
+      }
+      if (!/^\d{6}$/.test(address.pincode)) {
+        return "Pincode must be 6 digits.";
+      }
+      return "";
+    }
+
+    function saveAddress() {
+      const address = getAddressPayload();
+      const validationError = validateAddress(address);
+
+      if (validationError) {
+        addressStatus.style.color = "#b54242";
+        addressStatus.innerText = validationError;
+        return;
+      }
+
+      localStorage.setItem("checkoutAddress", JSON.stringify(address));
+      addressStatus.style.color = "#0f574f";
+      addressStatus.innerText = "Address saved successfully.";
+    }
+
+    function getSelectedPayment() {
+      const selected = document.querySelector('input[name="payment"]:checked');
+      return selected ? selected.value : "";
+    }
+
+    function placeOrder() {
+      checkoutError.innerText = "";
+
+      if (cartItems.length === 0) {
+        checkoutError.innerText = "Your cart is empty.";
+        return;
+      }
+
+      const address = getAddressPayload();
+      const validationError = validateAddress(address);
+      if (validationError) {
+        checkoutError.innerText = validationError;
+        return;
+      }
+
+      const paymentMethod = getSelectedPayment();
+      if (!paymentMethod) {
+        checkoutError.innerText = "Please select a payment method.";
+        return;
+      }
+
+      const orders = JSON.parse(localStorage.getItem("orders") || "[]");
+      const totalItems = cartItems.reduce((sum, i) => sum + Number(i.qty || 0), 0);
+      const totalPrice = cartItems.reduce((sum, i) => sum + Number(i.price || 0) * Number(i.qty || 0), 0);
+
+      const order = {
+        id: "OD-" + Date.now(),
+        name: cartItems[0]?.name || "Cart Order",
+        image: cartItems[0]?.img || "",
+        price: totalPrice,
+        qty: totalItems,
+        product: totalItems > 1 ? `${cartItems[0]?.name || "Item"} +${totalItems - 1} more` : (cartItems[0]?.name || "Item"),
+        items: cartItems.map(item => ({
+          name: item.name,
+          image: item.img,
+          price: Number(item.price),
+          quantity: Number(item.qty),
+          totalAmount: Number(item.price) * Number(item.qty),
+          category: item.category || ""
+        })),
+        address,
+        paymentMethod,
+        status: "processing",
+        date: new Date().toLocaleString(),
+        time: new Date().toLocaleString(),
+        phone: localStorage.getItem("userPhone") || ""
+      };
+
+      orders.push(order);
+      localStorage.setItem("orders", JSON.stringify(orders));
+      localStorage.setItem("checkoutAddress", JSON.stringify(address));
+      localStorage.setItem("cartItems", "[]");
+      cartItems = [];
+
+      window.location.href = "orders.html";
+    }
+
+    function prefillAddress() {
+      const saved = JSON.parse(localStorage.getItem("checkoutAddress") || "null");
+      if (!saved) return;
+
+      document.getElementById("fullName").value = saved.fullName || "";
+      document.getElementById("phone").value = saved.phone || "";
+      document.getElementById("addressLine").value = saved.addressLine || "";
+      document.getElementById("city").value = saved.city || "";
+      document.getElementById("pincode").value = saved.pincode || "";
+    }
+
+    prefillAddress();
+    renderSummary();
+  </script>
+</body>
+</html>

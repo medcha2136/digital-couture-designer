@@ -1,0 +1,252 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Customize</title>
+
+    <style>
+      body {
+        font-family: Arial;
+        background: #f4f7fa;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .product {
+        text-align: center;
+      }
+
+      .product img {
+        width: 200px;
+        border-radius: 10px;
+      }
+
+      button {
+        padding: 10px;
+        margin-top: 10px;
+        background: #2a9d8f;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+
+      .box {
+        display: none;
+        background: #f9f9f9;
+        padding: 15px;
+        margin-top: 10px;
+        border-radius: 8px;
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- PRODUCT -->
+      <div class="product">
+        <img id="img" />
+        <h2 id="name"></h2>
+        <p id="price"></p>
+      </div>
+
+      <!-- FABRIC -->
+      <button onclick="toggleFabric()">🧵 Select Fabric</button>
+
+      <div id="fabricBox" class="box">
+        <select id="fabricOptions"></select>
+        <p id="aiSuggestion" style="color: #2a9d8f; font-weight: bold"></p>
+      </div>
+
+      <!-- COLOR -->
+      <h3>Color</h3>
+      <input type="color" id="color" />
+
+      <!-- MEASUREMENTS -->
+      <button onclick="toggleMeasurements()">📏 Measurements</button>
+
+      <div id="measureBox" class="box">
+        <input id="chest" placeholder="Chest" />
+        <input id="waist" placeholder="Waist" />
+        <input id="length" placeholder="Length" />
+      </div>
+
+      <!-- PREVIOUS ORDERS -->
+      <button onclick="toggleOrders()">📜 Previous Orders</button>
+
+      <div id="ordersBox" class="box">
+        <div id="ordersList"></div>
+      </div>
+
+      <!-- PLACE ORDER -->
+      <button onclick="placeOrder()">Place Order</button>
+    </div>
+
+    <script>
+      /* LOAD PRODUCT */
+      let product = localStorage.getItem("selectedProduct");
+      let uploadedImage = localStorage.getItem("uploadedImage");
+
+      document.getElementById("img").src =
+        uploadedImage || localStorage.getItem("selectedImage");
+
+      document.getElementById("name").innerText = product;
+      document.getElementById("price").innerText =
+        localStorage.getItem("selectedPrice");
+
+      /* DEFAULT FABRIC DATA */
+      const fabricData = {
+        Lehenga: ["Silk", "Velvet", "Net", "Georgette"],
+        "Half Saree": ["Silk", "Chiffon", "Georgette"],
+        Sharara: ["Silk", "Georgette", "Crepe"],
+        Kurti: ["Cotton", "Rayon", "Linen"],
+        Frock: ["Net", "Satin"],
+        "Traditional Dress": ["Silk", "Cotton"],
+      };
+
+      /* FABRIC BUTTON */
+      function toggleFabric() {
+        let box = document.getElementById("fabricBox");
+
+        if (box.style.display === "block") {
+          box.style.display = "none";
+          return;
+        }
+
+        box.style.display = "block";
+
+        /* CHECK IMAGE FIRST (AI MODE) */
+        if (uploadedImage) {
+          detectFabricFromImage();
+        } else {
+          loadNormalFabric();
+        }
+      }
+
+      /* NORMAL FABRIC */
+      function loadNormalFabric() {
+        let select = document.getElementById("fabricOptions");
+        select.innerHTML = "";
+
+        let fabrics = fabricData[product] || ["Cotton", "Silk"];
+
+        fabrics.forEach((f) => {
+          select.innerHTML += `<option>${f}</option>`;
+        });
+
+        document.getElementById("aiSuggestion").innerText =
+          "✨ Choose fabric based on comfort";
+      }
+
+      /* AI FABRIC DETECTION */
+      function detectFabricFromImage() {
+        let select = document.getElementById("fabricOptions");
+        select.innerHTML = "";
+
+        /* SIMULATED AI LOGIC */
+        if (product && product.toLowerCase().includes("kurti")) {
+          select.innerHTML = `
+<option>Cotton (Chikankari)</option>
+<option>Muslin</option>
+<option>Georgette</option>
+`;
+
+          document.getElementById("aiSuggestion").innerText =
+            "✨ AI Detected: Chikankari embroidery on Cotton fabric";
+        } else if (product && product.toLowerCase().includes("lehenga")) {
+          select.innerHTML = `
+<option>Silk</option>
+<option>Velvet</option>
+<option>Net</option>
+`;
+
+          document.getElementById("aiSuggestion").innerText =
+            "✨ AI Recommended: Silk for premium look";
+        } else {
+          select.innerHTML = `
+<option>Cotton</option>
+<option>Georgette</option>
+`;
+
+          document.getElementById("aiSuggestion").innerText =
+            "✨ AI Suggested based on design pattern";
+        }
+      }
+
+      /* MEASUREMENTS */
+      function toggleMeasurements() {
+        let box = document.getElementById("measureBox");
+        box.style.display = box.style.display === "block" ? "none" : "block";
+      }
+
+      /* ORDERS */
+      function toggleOrders() {
+        let box = document.getElementById("ordersBox");
+
+        if (box.style.display === "block") {
+          box.style.display = "none";
+        } else {
+          box.style.display = "block";
+          loadOrders();
+        }
+      }
+
+      function loadOrders() {
+        let orders = JSON.parse(localStorage.getItem("orders")) || [];
+        let user = localStorage.getItem("userPhone");
+
+        let userOrders = orders.filter((o) => o.user === user);
+
+        let div = document.getElementById("ordersList");
+        div.innerHTML = "";
+
+        if (userOrders.length === 0) {
+          div.innerHTML = "No previous orders";
+          return;
+        }
+
+        userOrders.forEach((o) => {
+          div.innerHTML += `
+<div style="background:white;padding:10px;margin-bottom:10px;border-radius:6px;">
+<b>${o.product}</b><br>
+Fabric: ${o.fabric}<br>
+Color: ${o.color}
+</div>
+`;
+        });
+      }
+
+      /* PLACE ORDER */
+      function placeOrder() {
+        let order = {
+          product: product,
+          fabric: document.getElementById("fabricOptions").value,
+          color: document.getElementById("color").value,
+          user: localStorage.getItem("userPhone"),
+        };
+
+        let orders = JSON.parse(localStorage.getItem("orders")) || [];
+        orders.push(order);
+
+        localStorage.setItem("orders", JSON.stringify(orders));
+
+        alert("🎉 Order placed!");
+      }
+    </script>
+  </body>
+</html>

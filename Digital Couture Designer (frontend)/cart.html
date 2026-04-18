@@ -1,128 +1,285 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cart - Digital Couture</title>
-
-
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-body{
-margin:0;
-font-family:Arial;
-background:#f4f7fa;
-padding:40px;
-}
+  :root {
+    --brand: #146c63;
+    --brand-dark: #0f574f;
+    --ink: #1f2b30;
+    --muted: #62717a;
+    --bg: #f3f8fa;
+    --line: #dbe7ea;
+  }
 
-h2{
-color:#2a9d8f;
-}
+  * { box-sizing: border-box; }
 
-/* Card */
-.card{
-background:white;
-padding:20px;
-border-radius:10px;
-box-shadow:0 6px 12px rgba(0,0,0,.1);
-margin-top:20px;
-}
+  body {
+    margin: 0;
+    font-family: "Poppins", "Segoe UI", sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+  }
 
-/* Floating Dock */
-.floating-dock{
-position:fixed;
-bottom:20px;
-left:50%;
-transform:translateX(-50%);
-background:#ffffff;
-padding:14px 35px;
-border-radius:50px;
-box-shadow:0 12px 30px rgba(0,0,0,.25);
-display:flex;
-gap:35px;
-z-index:3000;
-}
+  .topbar {
+    border-bottom: 1px solid var(--line);
+    background: #fff;
+  }
 
-.dock-item{
-position:relative;
-font-size:22px;
-cursor:pointer;
-color:#2a9d8f;
-transition:.3s;
-}
+  .topbar-inner {
+    width: min(1000px, 94vw);
+    margin: 0 auto;
+    min-height: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
 
-.dock-item:hover{
-transform:translateY(-6px) scale(1.2);
-color:#21867a;
-}
+  .title {
+    margin: 0;
+    color: var(--brand-dark);
+    font-size: clamp(1.1rem, 2.1vw, 1.5rem);
+  }
 
-.dock-item span{
-position:absolute;
-bottom:45px;
-left:50%;
-transform:translateX(-50%);
-background:#2a9d8f;
-color:white;
-padding:6px 12px;
-border-radius:6px;
-font-size:13px;
-opacity:0;
-transition:.3s;
-white-space:nowrap;
-}
+  .links {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
 
-.dock-item:hover span{
-opacity:1;
-bottom:55px;
-}
+  .btn {
+    border: 1px solid var(--line);
+    background: #fff;
+    border-radius: 999px;
+    padding: 8px 13px;
+    cursor: pointer;
+    font-weight: 500;
+  }
+
+  .btn.primary {
+    background: linear-gradient(90deg, var(--brand), var(--brand-dark));
+    color: #fff;
+    border: 0;
+  }
+
+  .container {
+    width: min(1000px, 94vw);
+    margin: 22px auto 40px;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 16px;
+  }
+
+  .card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 14px;
+  }
+
+  .item {
+    display: grid;
+    grid-template-columns: 96px 1fr auto;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .item:last-child { margin-bottom: 0; }
+
+  .item img {
+    width: 96px;
+    height: 96px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+
+  .meta h3 {
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  .meta p {
+    margin: 6px 0 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  .qty-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .qty-row button {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: #fff;
+    cursor: pointer;
+  }
+
+  .price {
+    font-weight: 600;
+    color: var(--brand-dark);
+  }
+
+  .empty {
+    text-align: center;
+    color: var(--muted);
+    padding: 26px 12px;
+  }
+
+  .summary h4 {
+    margin: 0 0 10px;
+    color: var(--brand-dark);
+  }
+
+  .row {
+    display: flex;
+    justify-content: space-between;
+    margin: 8px 0;
+    color: var(--muted);
+  }
+
+  .row.total {
+    color: var(--ink);
+    font-weight: 600;
+    border-top: 1px solid var(--line);
+    padding-top: 10px;
+    margin-top: 14px;
+  }
+
+  .book-btn {
+    width: 100%;
+    margin-top: 12px;
+    border: 0;
+    border-radius: 10px;
+    padding: 11px 12px;
+    background: linear-gradient(90deg, var(--brand), var(--brand-dark));
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: filter .2s ease, transform .2s ease;
+  }
+
+  .book-btn:hover {
+    filter: brightness(1.05);
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 860px) {
+    .layout { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
-
 <body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <h1 class="title">Your Cart</h1>
+      <div class="links">
+        <button class="btn" onclick="location.href='products.html'">Products</button>
+        <button class="btn" onclick="location.href='Dashboard.html'">Dashboard</button>
+        <button class="btn primary" onclick="clearCart()">Clear Cart</button>
+      </div>
+    </div>
+  </header>
 
-<h2>🛒 Your Cart</h2>
+  <main class="container">
+    <div class="layout">
+      <section class="card" id="itemsWrap"></section>
+      <aside class="card summary">
+        <h4>Order Summary</h4>
+        <div class="row"><span>Items</span><span id="count">0</span></div>
+        <div class="row"><span>Subtotal</span><span id="subtotal">INR 0</span></div>
+        <div class="row"><span>Delivery</span><span>INR 0</span></div>
+        <div class="row total"><span>Total</span><span id="total">INR 0</span></div>
+        <button class="book-btn" type="button" onclick="bookNow()">Book Now</button>
+      </aside>
+    </div>
+  </main>
 
-<div class="card">
-No items in cart yet.
-</div>
+  <script>
+    if (!localStorage.getItem("userPhone")) {
+      window.location.href = "login.html";
+    }
 
-<!-- Floating Dock -->
-<div class="floating-dock">
+    let cartItems = JSON.parse(localStorage.getItem("cartItems") || "[]");
+    const itemsWrap = document.getElementById("itemsWrap");
 
-<div class="dock-item" onclick="goDashboard()">
-🏠<span>Home</span>
-</div>
+    function renderCart() {
+      if (cartItems.length === 0) {
+        itemsWrap.innerHTML = `<p class="empty">No items in cart yet. Add products to continue.</p>`;
+        updateSummary();
+        return;
+      }
 
-<div class="dock-item" onclick="goCart()">
-🛒<span>Cart</span>
-</div>
+      itemsWrap.innerHTML = "";
+      cartItems.forEach((item, index) => {
+        itemsWrap.innerHTML += `
+          <article class="item">
+            <img src="${item.img}" alt="${item.name}">
+            <div class="meta">
+              <h3>${item.name}</h3>
+              <p>${item.category}</p>
+              <div class="qty-row">
+                <button onclick="changeQty(${index}, -1)">-</button>
+                <span>${item.qty}</span>
+                <button onclick="changeQty(${index}, 1)">+</button>
+              </div>
+            </div>
+            <div class="price">INR ${item.price * item.qty}</div>
+          </article>
+        `;
+      });
 
-<div class="dock-item" onclick="goWishlist()">
-❤️<span>Wishlist</span>
-</div>
+      updateSummary();
+    }
 
-<div class="dock-item" onclick="goSettings()">
-⚙<span>Settings</span>
-</div>
+    function changeQty(index, delta) {
+      cartItems[index].qty += delta;
+      if (cartItems[index].qty <= 0) {
+        cartItems.splice(index, 1);
+      }
+      localStorage.setItem("cartItems", JSON.stringify(cartItems));
+      renderCart();
+    }
 
-<div class="dock-item" onclick="goOrders()">
-📦<span>Orders</span>
-</div>
+    function clearCart() {
+      cartItems = [];
+      localStorage.setItem("cartItems", "[]");
+      renderCart();
+    }
 
-</div>
+    function bookNow() {
+      if (cartItems.length === 0) {
+        alert("Your cart is empty.");
+        return;
+      }
+      window.location.href = "checkout.html";
+    }
 
-<script>
+    function updateSummary() {
+      const itemCount = cartItems.reduce((sum, i) => sum + i.qty, 0);
+      const subtotal = cartItems.reduce((sum, i) => sum + i.price * i.qty, 0);
 
-// Protect page
-if(!localStorage.getItem("userPhone")){
-window.location.href="login.html";
-}
+      document.getElementById("count").innerText = itemCount;
+      document.getElementById("subtotal").innerText = "INR " + subtotal;
+      document.getElementById("total").innerText = "INR " + subtotal;
+    }
 
-// Navigation
-function goDashboard(){ window.location.href="dashboard.html"; }
-function goCart(){ window.location.href="cart.html"; }
-function goWishlist(){ window.location.href="wishlist.html"; }
-function goSettings(){ window.location.href="settings.html"; }
-function goOrders(){ window.location.href="orders.html"; }
-
-</script>
-
+    renderCart();
+  </script>
 </body>
 </html>

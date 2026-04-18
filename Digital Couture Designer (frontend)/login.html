@@ -126,6 +126,22 @@ document.getElementById("msg").innerText="Invalid OTP";
 }
 }
 
+/* 🔥 ENTER KEY FUNCTIONALITY */
+
+// When pressing ENTER in phone input → send OTP
+document.getElementById("phone").addEventListener("keypress", function(e){
+  if(e.key === "Enter"){
+    sendOTP();
+  }
+});
+
+// When pressing ENTER in OTP input → verify OTP
+document.getElementById("otp").addEventListener("keypress", function(e){
+  if(e.key === "Enter"){
+    verifyOTP();
+  }
+});
+
 </script>
 
 </body>

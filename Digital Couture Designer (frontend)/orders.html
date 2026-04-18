@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Orders - Digital Couture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #2a9d8f;
+    --bg: #f4f7fa;
+    --card: #ffffff;
+    --soft: #f1f1f1;
+    --hover-soft: #f0fdfa;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: "Poppins", Arial, sans-serif;
+    background: var(--bg);
+    color: #000;
+    padding-bottom: 96px;
+  }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: #fff;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .topbar-inner {
+    width: min(1160px, 94vw);
+    min-height: 72px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .title {
+    margin: 0;
+    color: var(--primary);
+    font-size: clamp(1.2rem, 2.4vw, 1.6rem);
+  }
+
+  .top-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: #fff;
+    color: #000;
+    border-radius: 999px;
+    padding: 8px 13px;
+    font: inherit;
+    font-weight: 500;
+    cursor: pointer;
+    transition: .2s ease;
+  }
+
+  .btn:hover {
+    transform: translateY(-1px);
+    background: var(--hover-soft);
+  }
+
+  .container {
+    width: min(1160px, 94vw);
+    margin: 22px auto 0;
+  }
+
+  .tabs-wrap {
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 14px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    padding: 10px;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .tab {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: #fff;
+    border-radius: 999px;
+    padding: 8px 12px;
+    font: inherit;
+    font-size: 0.92rem;
+    cursor: pointer;
+    transition: .2s ease;
+  }
+
+  .tab:hover {
+    background: var(--hover-soft);
+  }
+
+  .tab.active {
+    background: var(--primary);
+    color: #fff;
+    border-color: transparent;
+  }
+
+  .summary {
+    margin: 14px 2px;
+    color: rgba(0, 0, 0, 0.7);
+    font-size: 0.92rem;
+  }
+
+  .orders-grid {
+    display: grid;
+    gap: 14px;
+  }
+
+  .order-card {
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 14px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.06);
+    padding: 14px;
+    display: grid;
+    grid-template-columns: 110px 1fr auto;
+    gap: 14px;
+    align-items: center;
+  }
+
+  .thumb {
+    width: 110px;
+    height: 110px;
+    border-radius: 10px;
+    object-fit: cover;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: var(--soft);
+  }
+
+  .status-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+
+  .status-pill,
+  .reward-pill {
+    border-radius: 999px;
+    padding: 4px 9px;
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+
+  .status-pill {
+    background: var(--hover-soft);
+    color: var(--primary);
+    border: 1px solid rgba(42, 157, 143, 0.35);
+  }
+
+  .reward-pill {
+    background: var(--soft);
+    color: #000;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .name {
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  .msg {
+    margin: 6px 0;
+    color: rgba(0, 0, 0, 0.7);
+    font-size: 0.9rem;
+  }
+
+  .meta {
+    margin: 0;
+    font-size: 0.86rem;
+    color: rgba(0, 0, 0, 0.7);
+  }
+
+  .right {
+    text-align: right;
+    min-width: 140px;
+  }
+
+  .price {
+    margin: 0 0 6px;
+    color: var(--primary);
+    font-weight: 700;
+  }
+
+  .qty {
+    margin: 0 0 10px;
+    font-size: 0.86rem;
+    color: rgba(0, 0, 0, 0.72);
+  }
+
+  .action-btn {
+    border: 0;
+    border-radius: 10px;
+    background: var(--primary);
+    color: #fff;
+    padding: 9px 12px;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .2s ease;
+  }
+
+  .action-btn:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.03);
+  }
+
+  .empty {
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    padding: 30px 16px;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.7);
+  }
+
+  .floating-dock {
+    position: fixed;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+    border-radius: 999px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+    padding: 8px 14px;
+    display: flex;
+    gap: 8px;
+    z-index: 40;
+  }
+
+  .dock-item {
+    position: relative;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid transparent;
+    background: #fff;
+    color: var(--primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+
+  .dock-item:hover,
+  .dock-item.active {
+    transform: translateY(-4px);
+    background: var(--hover-soft);
+  }
+
+  .dock-item .tip {
+    position: absolute;
+    bottom: 46px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--primary);
+    color: #fff;
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .dock-item:hover .tip {
+    opacity: 1;
+  }
+
+  @media (max-width: 860px) {
+    .order-card {
+      grid-template-columns: 90px 1fr;
+    }
+
+    .thumb {
+      width: 90px;
+      height: 90px;
+    }
+
+    .right {
+      text-align: left;
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .right .price,
+    .right .qty {
+      margin: 0;
+    }
+  }
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <h1 class="title">My Orders</h1>
+      <div class="top-actions">
+        <button class="btn" onclick="location.href='Dashboard.html'">Dashboard</button>
+        <button class="btn" onclick="location.href='products.html'">Products</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="tabs-wrap">
+      <div class="tabs" id="tabs"></div>
+    </section>
+
+    <p class="summary" id="summary"></p>
+    <section class="orders-grid" id="ordersGrid"></section>
+  </main>
+
+  <div class="floating-dock">
+    <button class="dock-item" onclick="location.href='wishlist.html'" aria-label="Wishlist">&#10084;<span class="tip">Wishlist</span></button>
+    <button class="dock-item" onclick="location.href='cart.html'" aria-label="Cart">&#128722;<span class="tip">Cart</span></button>
+    <button class="dock-item active" onclick="location.href='orders.html'" aria-label="Orders">&#128230;<span class="tip">Orders</span></button>
+    <button class="dock-item" onclick="alert('Settings module is not available yet.')" aria-label="Settings">&#9881;<span class="tip">Settings</span></button>
+    <button class="dock-item" onclick="alert('Account panel is available on dashboard.')" aria-label="Account">&#128100;<span class="tip">Account</span></button>
+  </div>
+
+  <script>
+    if (!localStorage.getItem("userPhone")) {
+      window.location.href = "login.html";
+    }
+
+    const tabsConfig = [
+      { key: "all", label: "All" },
+      { key: "unpaid", label: "Unpaid" },
+      { key: "processing", label: "Processing" },
+      { key: "shipped", label: "Shipped" },
+      { key: "delivered", label: "Delivered" },
+      { key: "previous", label: "Previous Orders" }
+    ];
+
+    // Temporary frontend-first data source (API-ready)
+    const sampleOrders = [
+      { id: "OD-1001", name: "Floral Lehenga", image: "lehanga.jpeg", price: 2999, quantity: 1, status: "delivered", date: "2026-04-09", reward: 75 },
+      { id: "OD-1002", name: "Everyday Kurti", image: "kurthi.jpeg", price: 999, quantity: 2, status: "processing", date: "2026-04-14", reward: 0 },
+      { id: "OD-1003", name: "Designer Sharara", image: "sharara.jpeg", price: 2699, quantity: 1, status: "shipped", date: "2026-04-15", reward: 35 },
+      { id: "OD-1004", name: "Festival Half Saree", image: "half saree.jpeg", price: 2399, quantity: 1, status: "unpaid", date: "2026-04-16", reward: 0 }
+    ];
+
+    let activeTab = "all";
+    let allOrders = [];
+
+    function getStatusMessage(status) {
+      if (status === "delivered") return "Your package has been successfully delivered.";
+      if (status === "shipped") return "Your order is on the way. Track delivery updates.";
+      if (status === "processing") return "Your order is being prepared for dispatch.";
+      return "Your payment is pending. Complete payment to continue.";
+    }
+
+    function getActionLabel(status) {
+      if (status === "delivered") return "Review";
+      if (status === "unpaid") return "Pay Now";
+      if (status === "shipped") return "Track Order";
+      return "View Details";
+    }
+
+    function toTitleCase(text) {
+      return text.charAt(0).toUpperCase() + text.slice(1);
+    }
+
+    // API-ready loader (replace internals with fetch/axios later)
+    function loadOrders() {
+      const stored = JSON.parse(localStorage.getItem("orders") || "[]");
+      if (stored.length > 0) {
+        allOrders = stored.map((o, idx) => ({
+          id: o.id || `OD-${2000 + idx}`,
+          name: o.product || o.name || "Custom Order",
+          image: o.image || o.img || "kurthi.jpeg",
+          price: Number(o.price || 0),
+          quantity: Number(o.qty || 1),
+          status: String(o.status || "processing").toLowerCase(),
+          date: o.time || new Date().toISOString().slice(0, 10),
+          reward: o.reward || 0
+        }));
+      } else {
+        allOrders = [...sampleOrders];
+      }
+    }
+
+    function filterOrders(statusKey) {
+      if (statusKey === "all") return allOrders;
+      if (statusKey === "previous") return allOrders.filter(o => o.status === "delivered");
+      return allOrders.filter(o => o.status === statusKey);
+    }
+
+    function renderTabs() {
+      const tabs = document.getElementById("tabs");
+      tabs.innerHTML = tabsConfig.map(tab => `
+        <button class="tab ${activeTab === tab.key ? "active" : ""}" onclick="setActiveTab('${tab.key}')">${tab.label}</button>
+      `).join("");
+    }
+
+    function renderOrders() {
+      const orders = filterOrders(activeTab);
+      const grid = document.getElementById("ordersGrid");
+      const summary = document.getElementById("summary");
+
+      summary.innerText = `${orders.length} order(s) shown`;
+      grid.innerHTML = "";
+
+      if (orders.length === 0) {
+        grid.innerHTML = `<article class="empty"><h3 style="margin:0 0 8px; color:#2a9d8f;">No orders found</h3><p style="margin:0;">Try another tab to view your orders.</p></article>`;
+        return;
+      }
+
+      orders.forEach(order => {
+        grid.innerHTML += `
+          <article class="order-card">
+            <img class="thumb" src="${order.image}" alt="${order.name}">
+
+            <div>
+              <div class="status-row">
+                <span class="status-pill">${toTitleCase(order.status)}</span>
+                ${order.reward ? `<span class="reward-pill">+${order.reward} pts</span>` : ""}
+              </div>
+              <h3 class="name">${order.name}</h3>
+              <p class="msg">${getStatusMessage(order.status)}</p>
+              <p class="meta">Order ID: ${order.id} | Date: ${order.date}</p>
+            </div>
+
+            <div class="right">
+              <p class="price">INR ${order.price * order.quantity}</p>
+              <p class="qty">x${order.quantity}</p>
+              <button class="action-btn" onclick="handleAction('${order.status}', '${order.id}')">${getActionLabel(order.status)}</button>
+            </div>
+          </article>
+        `;
+      });
+    }
+
+    function setActiveTab(tabKey) {
+      activeTab = tabKey;
+      renderTabs();
+      renderOrders();
+    }
+
+    function handleAction(status, orderId) {
+      if (status === "unpaid") {
+        alert(`Proceed to payment for ${orderId}`);
+      } else if (status === "shipped") {
+        alert(`Opening tracking for ${orderId}`);
+      } else if (status === "delivered") {
+        alert(`Write a review for ${orderId}`);
+      } else {
+        alert(`Viewing details for ${orderId}`);
+      }
+    }
+
+    window.setActiveTab = setActiveTab;
+    window.handleAction = handleAction;
+
+    loadOrders();
+    renderTabs();
+    renderOrders();
+  </script>
+</body>
+</html>

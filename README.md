@@ -22,3 +22,19 @@ A web application for designing and customizing outfits digitally.
 - Image-based design search
 - AI recommendations
 - Cart & order system
+
+## API Endpoints
+
+POST /auth/login
+Body:
+{ "phone": "string" }
+
+POST /designs
+Body:
+{ "fabric": "string", "color": "string", "userId": number }
+
+GET /designs/{userId}
+
+POST /measurements
+Body:
+{ "chest": "", "waist": "", "hip": "", "userId": number }
