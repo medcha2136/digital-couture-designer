@@ -11,7 +11,7 @@ A web application for designing and customizing outfits digitally.
 ## Tech Stack
 - Frontend: HTML, CSS, JavaScript
 - Backend: Spring Boot
-- Database: MySQL
+- Database: PostgreSQL
 
 ## Setup
 1. Run backend:
