@@ -542,7 +542,7 @@
       };
 
       fetch("http://localhost:8080/api/measurements", {
-       method: "POST",
+  method: "POST",
   headers: {
     "Content-Type": "application/json"
   },
@@ -558,8 +558,16 @@
   status.innerText = "Saved to database ✅";
   console.log(resData);
 
-  // optional: still keep local backup
+  // save locally
   localStorage.setItem("measurements", JSON.stringify(data));
+  localStorage.setItem("tempMeasurements", JSON.stringify(data));
+
+  // redirect
+  const redirectPage = localStorage.getItem("redirectAfterMeasurement");
+  if (redirectPage) {
+    localStorage.removeItem("redirectAfterMeasurement");
+    window.location.href = redirectPage;
+  }
 })
 .catch(err => {
   console.error(err);

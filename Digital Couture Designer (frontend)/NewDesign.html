@@ -389,6 +389,28 @@
     border-radius: 10px;
     padding: 10px;
     background: #fff;
+    cursor: pointer;
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+
+  .order-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(31, 43, 49, 0.12);
+  }
+
+  .order-item-top {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .order-item-top img {
+    width: 56px;
+    height: 56px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid var(--line);
   }
 
   .order-item .meta {
@@ -441,6 +463,23 @@
     border-radius: 10px;
     padding: 10px;
     font: inherit;
+  }
+
+  .measure-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .measure-options .btn {
+    border-radius: 10px;
+    padding: 9px 10px;
+  }
+
+  .dynamic-fields {
+    display: grid;
+    gap: 10px;
   }
 
   .fixed-order {
@@ -544,7 +583,7 @@
 
     <section class="right">
       <article class="card accordion open" data-accordion>
-        <button class="acc-head" type="button">
+        <button class="acc-head" type="button" onclick="openMeasurementModal()">
           <span class="left-label"><span class="icon">??</span> Fabric Selection</span>
           <span class="chev">?</span>
         </button>
@@ -557,7 +596,7 @@
       </article>
 
       <article class="card accordion" data-accordion>
-        <button class="acc-head" type="button">
+        <button class="acc-head" type="button" onclick="openMeasurementModal()">
           <span class="left-label"><span class="icon">??</span> Measurements</span>
           <span class="chev">?</span>
         </button>
@@ -598,18 +637,14 @@
     <div class="modal" role="dialog" aria-label="Measurement Form">
       <h3 style="margin:0 0 12px;color:var(--primary-dark);">Enter Measurements</h3>
 
-      <div class="field">
-        <label for="chestInput">Chest (inches)</label>
-        <input type="number" id="chestInput" min="1">
+      <div class="measure-options">
+        <button class="btn" type="button" onclick="importMeasurements()">Import</button>
+        <button class="btn" type="button" onclick="prepareCreateMeasurement()">Create New</button>
       </div>
-      <div class="field">
-        <label for="waistInput">Waist (inches)</label>
-        <input type="number" id="waistInput" min="1">
+      <div id="measureHelpText" style="margin:0 0 10px;color:var(--muted);font-size:.88rem;">
+        Choose Import to load latest order measurement or Create New to enter values.
       </div>
-      <div class="field">
-        <label for="lengthInput">Length (inches)</label>
-        <input type="number" id="lengthInput" min="1">
-      </div>
+      <div id="dynamicMeasurementFields" class="dynamic-fields"></div>
 
       <div style="display:flex;gap:10px;justify-content:flex-end;">
         <button class="btn" type="button" onclick="closeMeasurementModal()">Cancel</button>
@@ -673,7 +708,10 @@
     if (!products[selectedProductName]) selectedProductName = "Kurti";
 
     let selectedFabric = "";
+    let selectedColor = "#2a9d8f";
     let selectedMeasurements = JSON.parse(localStorage.getItem("tempMeasurements") || "null");
+    let measurementMode = "create";
+    let currentMeasurementFields = [];
 
     const productImage = document.getElementById("productImage");
     const productName = document.getElementById("productName");
@@ -683,9 +721,79 @@
     const aiDetectNote = document.getElementById("aiDetectNote");
     const measurementStatus = document.getElementById("measurementStatus");
     const measurementModal = document.getElementById("measurementModal");
+    const dynamicMeasurementFields = document.getElementById("dynamicMeasurementFields");
+    const measureHelpText = document.getElementById("measureHelpText");
     const ordersPanel = document.getElementById("ordersPanel");
     const ordersList = document.getElementById("ordersList");
     const toast = document.getElementById("toast");
+
+    const fullMeasurementFields = [
+  "chest_bust",
+  "waist_upper",
+  "hip_upper",
+  "shoulder_width",
+  "sleeve_length",
+  "armhole",
+  "neck",
+  "garment_length",
+  "waist_pant",
+  "hip_lower",
+  "inseam_length",
+  "outseam_length",
+  "thigh"
+];
+
+const garmentMeasurementMap = {
+  Kurti: [
+    "chest_bust",
+    "waist_upper",
+    "hip_upper",
+    "shoulder_width",
+    "sleeve_length",
+    "armhole",
+    "neck",
+    "garment_length"
+  ],
+
+  Lehenga: [
+    "waist_pant",
+    "hip_lower",
+    "garment_length"
+  ],
+
+  Sharara: [
+    "waist_pant",
+    "hip_lower",
+    "inseam_length",
+    "outseam_length",
+    "thigh"
+  ],
+
+  "Half Saree": [
+    "chest_bust",
+    "waist_upper",
+    "hip_upper",
+    "garment_length"
+  ]
+};
+    function labelForField(fieldKey) {
+  return fieldKey.replaceAll("_", " ").toUpperCase();
+}
+
+    function renderDynamicMeasurementFields() {
+  currentMeasurementFields = garmentMeasurementMap[selectedProductName] || fullMeasurementFields;
+      dynamicMeasurementFields.innerHTML = "";
+
+      const current = selectedMeasurements || {};
+      currentMeasurementFields.forEach((key) => {
+        dynamicMeasurementFields.innerHTML += `
+          <div class="field">
+            <label for="measure_${key}">${labelForField(key)}</label>
+            <input type="number" id="measure_${key}" min="1" value="${current[key] || ""}">
+          </div>
+        `;
+      });
+    }
 
     function showToast(message, isError) {
       toast.innerText = message;
@@ -750,29 +858,74 @@
 
     function openMeasurementModal() {
       measurementModal.classList.add("open");
-      const m = selectedMeasurements || {};
-      document.getElementById("chestInput").value = m.chest || "";
-      document.getElementById("waistInput").value = m.waist || "";
-      document.getElementById("lengthInput").value = m.length || "";
+      measurementMode = "create";
+      measureHelpText.innerText = "Choose Import to load latest order measurement or Create New to enter values.";
+      renderDynamicMeasurementFields();
     }
 
     function closeMeasurementModal() {
       measurementModal.classList.remove("open");
     }
 
-    function saveMeasurements() {
-      const chest = document.getElementById("chestInput").value.trim();
-      const waist = document.getElementById("waistInput").value.trim();
-      const length = document.getElementById("lengthInput").value.trim();
+    function prepareCreateMeasurement() {
+  localStorage.setItem("redirectAfterMeasurement", "NewDesign.html");
+  window.location.href = "Measurements.html";
+}
 
-      if (!chest || !waist || !length) {
-        showToast("Please fill all measurement fields.", true);
+    function importMeasurements() {
+
+fetch("http://localhost:8080/api/measurements")
+.then(res => res.json())
+.then(data => {
+
+    if(data.length === 0){
+        showToast("No saved measurements found", true);
         return;
+    }
+
+    let html = "<h4>Select Measurement</h4>";
+
+    data.forEach(m => {
+        html += `
+        <div onclick='selectMeasurement(${JSON.stringify(m)})'
+             style="border:1px solid #ccc; padding:10px; margin:5px; cursor:pointer;">
+             
+            Chest: ${m.chest} | Waist: ${m.waist} | Hip: ${m.hip}
+        </div>`;
+    });
+
+    dynamicMeasurementFields.innerHTML = html;
+});
+}
+
+function selectMeasurement(m){
+  selectedMeasurements = m;
+
+  localStorage.setItem("tempMeasurements", JSON.stringify(selectedMeasurements));
+
+  renderDynamicMeasurementFields();
+  updateSummary();
+
+  showToast("Measurement Loaded ✅", false);
+}
+
+    function saveMeasurements() {
+      const payload = {};
+      const fields = garmentMeasurementMap[selectedProductName] || fullMeasurementFields;
+
+      for (const key of fields) {
+        const el = document.getElementById(`measure_${key}`);
+        const val = (el?.value || "").trim();
+        if (!val) {
+          showToast("Please fill all measurement fields.", true);
+          return;
+        }
+        payload[key] = val;
       }
 
-      selectedMeasurements = { chest, waist, length };
+      selectedMeasurements = payload;
       localStorage.setItem("tempMeasurements", JSON.stringify(selectedMeasurements));
-      measurementStatus.innerText = `Saved: Chest ${chest} | Waist ${waist} | Length ${length}`;
+      measurementStatus.innerText = "Saved: " + fields.map(k => `${labelForField(k).replace(" (inches)", "")} ${selectedMeasurements[k]}`).join(" | ");
       closeMeasurementModal();
       updateSummary();
     }
@@ -801,30 +954,67 @@
         return;
       }
 
-      userOrders.forEach(order => {
+      userOrders.forEach((order, index) => {
+        const m = order.measurements || {};
         const card = document.createElement("article");
         card.className = "order-item";
         card.innerHTML = `
-          <strong>${order.product}</strong>
-          <div class="meta">Fabric: ${order.fabric} | Color: ${order.color}</div>
-          <div class="meta">Chest: ${order.measurements.chest}, Waist: ${order.measurements.waist}, Length: ${order.measurements.length}</div>
+          <div class="order-item-top">
+            <img src="${order.image || 'kurthi.jpeg'}" alt="${order.product || 'Order'}">
+            <strong>${order.product || 'Order'}</strong>
+          </div>
+          <div class="meta">Fabric: ${order.fabric || '-'}${order.color ? ` | Color: ${order.color}` : ''}</div>
+          <div class="meta">Chest: ${m.chest || '-'}, Waist: ${m.waist || '-'}, Length: ${m.length || '-'}</div>
           <div class="meta">${order.time}</div>
         `;
+        card.addEventListener("click", () => loadOrderToStudio(userOrders[index]));
         ordersList.appendChild(card);
       });
     }
 
+    function loadOrderToStudio(order) {
+      if (!order) return;
+
+      if (order.product && products[order.product]) {
+        selectedProductName = order.product;
+      }
+
+      if (order.fabric) {
+        selectedFabric = order.fabric;
+      }
+
+      if (order.measurements) {
+        const filtered = {};
+        const fields = garmentMeasurementMap[selectedProductName] || fullMeasurementFields;
+
+fields.forEach(key => {
+          filtered[key] = order.measurements[key] || "";
+        });
+        selectedMeasurements = filtered;
+        localStorage.setItem("tempMeasurements", JSON.stringify(selectedMeasurements));
+      }
+
+      updateLeftProduct();
+      renderProductSwitch();
+      renderFabrics();
+      updateSummary();
+      closeOrdersPanel();
+      showToast("Previous order loaded.", false);
+    }
+
     function updateSummary() {
-      const measurementText = selectedMeasurements
-        ? `Chest ${selectedMeasurements.chest}, Waist ${selectedMeasurements.waist}, Length ${selectedMeasurements.length}`
+      const fields = garmentMeasurementMap[selectedProductName] || fullMeasurementFields;
+      const hasMeasurements = selectedMeasurements && fields.some(k => selectedMeasurements[k]);
+      const measurementText = hasMeasurements
+        ? fields.map(k => `${labelForField(k).replace(" (inches)", "")} ${selectedMeasurements[k] || "-"}`).join(" | ")
         : "Not added";
 
       document.getElementById("summaryFabric").innerText = "Fabric: " + (selectedFabric || "Not selected");
       document.getElementById("summaryMeasurement").innerText = "Measurements: " + measurementText;
-      document.getElementById("fixedSummary").innerText = `Fabric: ${selectedFabric || '--'} | Measurements: ${selectedMeasurements ? 'Added' : '--'}`;
+      document.getElementById("fixedSummary").innerText = `Fabric: ${selectedFabric || '--'} | Measurements: ${hasMeasurements ? measurementText : '--'}`;
 
-      if (selectedMeasurements) {
-        measurementStatus.innerText = `Saved: Chest ${selectedMeasurements.chest} | Waist ${selectedMeasurements.waist} | Length ${selectedMeasurements.length}`;
+      if (hasMeasurements) {
+        measurementStatus.innerText = `Saved: ${measurementText}`;
       }
     }
 
@@ -834,7 +1024,9 @@
         return;
       }
 
-      if (!selectedMeasurements || !selectedMeasurements.chest || !selectedMeasurements.waist || !selectedMeasurements.length) {
+      const required = garmentMeasurementMap[selectedProductName] || fullMeasurementFields;
+      const hasRequiredMeasurements = selectedMeasurements && required.every(k => selectedMeasurements[k]);
+      if (!hasRequiredMeasurements) {
         showToast("Please add measurements before placing order.", true);
         return;
       }
@@ -905,6 +1097,8 @@
     window.openOrdersPanel = openOrdersPanel;
     window.closeOrdersPanel = closeOrdersPanel;
     window.closeMeasurementModal = closeMeasurementModal;
+    window.prepareCreateMeasurement = prepareCreateMeasurement;
+    window.importMeasurements = importMeasurements;
     window.saveMeasurements = saveMeasurements;
     window.overlayClose = overlayClose;
     window.placeOrder = placeOrder;
