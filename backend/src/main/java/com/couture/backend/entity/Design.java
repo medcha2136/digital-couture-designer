@@ -17,4 +17,5 @@ public class Design {
     private String fabric;
     private String color;
     private Long userId;
+    private Long measurementId;
 }

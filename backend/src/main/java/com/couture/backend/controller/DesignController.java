@@ -2,27 +2,28 @@ package com.couture.backend.controller;
 
 import com.couture.backend.entity.Design;
 import com.couture.backend.repository.DesignRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import java.util.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/designs")
-@CrossOrigin(origins = "*")
+@RequestMapping("/api/design")
+@CrossOrigin
 public class DesignController {
 
-    private final DesignRepository repo;
+    @Autowired
+    private DesignRepository repo;
 
-    public DesignController(DesignRepository repo) {
-        this.repo = repo;
-    }
-
+    // Save new design
     @PostMapping
-    public Design save(@RequestBody Design design) {
+    public Design saveDesign(@RequestBody Design design) {
         return repo.save(design);
     }
 
+    // Get all designs of a user
     @GetMapping("/{userId}")
-    public List<Design> get(@PathVariable Long userId) {
+    public List<Design> getDesigns(@PathVariable Long userId) {
         return repo.findByUserId(userId);
     }
 }

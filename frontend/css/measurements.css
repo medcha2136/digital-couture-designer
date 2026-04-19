@@ -1,0 +1,269 @@
+  :root {
+    --primary: #2a9d8f;
+    --primary-dark: #1f7d71;
+    --bg: #f4f7fa;
+    --card: #ffffff;
+    --ink: #1f2b31;
+    --muted: #66747d;
+    --line: #dbe6eb;
+    --focus: rgba(42, 157, 143, 0.2);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Poppins", "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+  }
+
+  .topbar {
+    background: #fff;
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .topbar-inner {
+    width: min(900px, 94vw);
+    margin: 0 auto;
+    min-height: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+
+  h1 {
+    margin: 0;
+    color: var(--primary-dark);
+    font-size: clamp(1.1rem, 2.2vw, 1.45rem);
+  }
+
+  .btn {
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--ink);
+    border-radius: 999px;
+    padding: 8px 13px;
+    font: inherit;
+    font-weight: 500;
+    cursor: pointer;
+    transition: .2s ease;
+  }
+
+  .btn:hover { transform: translateY(-1px); }
+
+  .container {
+    width: min(900px, 94vw);
+    margin: 26px auto;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    box-shadow: 0 10px 24px rgba(20, 36, 45, 0.08);
+    padding: 18px;
+  }
+
+  .sub {
+    margin: 0 0 14px;
+    color: var(--muted);
+    font-size: 0.93rem;
+  }
+
+  .group-title {
+    margin: 18px 0 10px;
+    font-size: 0.95rem;
+    color: var(--primary-dark);
+    font-weight: 700;
+    letter-spacing: .2px;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 220px 1fr auto;
+    gap: 10px;
+    align-items: start;
+    border: 1px solid #edf2f5;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 10px;
+    transition: .2s ease;
+    background: #fff;
+  }
+
+  .row:hover {
+    border-color: #d3e7e4;
+    box-shadow: 0 6px 12px rgba(42, 157, 143, 0.08);
+  }
+
+  .label {
+    font-weight: 600;
+    color: #29414a;
+    padding-top: 8px;
+    white-space: nowrap;
+  }
+
+  .field-wrap input {
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 11px 12px;
+    font: inherit;
+    transition: .2s ease;
+  }
+
+  .field-wrap input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px var(--focus);
+  }
+
+  .helper {
+    margin-top: 6px;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  .error {
+    margin-top: 4px;
+    min-height: 16px;
+    font-size: 0.79rem;
+    color: #b54242;
+  }
+
+  .guide-btn {
+    border: 1px solid #cae2df;
+    background: #eef8f6;
+    color: var(--primary-dark);
+    border-radius: 10px;
+    width: 42px;
+    height: 42px;
+    font-size: 1.05rem;
+    cursor: pointer;
+    transition: .2s ease;
+    margin-top: 1px;
+  }
+
+  .guide-btn:hover {
+    background: #dff3ef;
+    transform: translateY(-1px);
+  }
+
+  .save-btn {
+    margin-top: 8px;
+    width: 100%;
+    border: 0;
+    border-radius: 11px;
+    padding: 12px;
+    background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+    color: #fff;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .2s ease;
+  }
+
+  .save-btn:hover { filter: brightness(1.05); }
+
+  #status {
+    margin: 10px 0 0;
+    min-height: 20px;
+    font-size: .9rem;
+    font-weight: 500;
+  }
+
+  .guide-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(18, 34, 41, 0.45);
+    display: grid;
+    place-items: center;
+    padding: 14px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .22s ease;
+    z-index: 25;
+  }
+
+  .guide-modal.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .guide-card {
+    width: min(560px, 94vw);
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    box-shadow: 0 16px 36px rgba(18, 34, 41, 0.2);
+    transform: translateY(10px) scale(.98);
+    transition: .22s ease;
+    overflow: hidden;
+  }
+
+  .guide-modal.open .guide-card {
+    transform: translateY(0) scale(1);
+  }
+
+  .guide-head {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .guide-head h3 {
+    margin: 0;
+    color: var(--primary-dark);
+    font-size: 1rem;
+  }
+
+  .close-x {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: #fff;
+    cursor: pointer;
+    font-size: 1.05rem;
+  }
+
+  .guide-body {
+    padding: 12px 14px 14px;
+  }
+
+  .guide-body img {
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .guide-text {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.55;
+  }
+
+  @media (max-width: 700px) {
+    .row {
+      grid-template-columns: 1fr;
+    }
+
+    .label { padding-top: 0; }
+
+    .guide-btn {
+      width: 100%;
+      height: 40px;
+    }
+  }

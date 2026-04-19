@@ -19,12 +19,11 @@ dashboard
         box-sizing: border-box;
       }
 
-      body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: var(--bg);
-        color: #000;
-      }
+    body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: var(--bg); /* back to normal */
+}
 
       .navbar {
         position: fixed;
@@ -139,9 +138,10 @@ dashboard
       }
 
       .main {
-        margin-left: 228px;
-        padding: 94px 26px 110px;
-      }
+  margin-left: 228px;
+  padding: 94px 26px 110px;
+  background: var(--bg);
+}
 
       .main-inner {
         max-width: 1100px;
@@ -574,7 +574,7 @@ dashboard
     <input type="file" id="fileInput" accept="image/*" style="display: none" />
 
     <script>
-      if (!localStorage.getItem("userPhone")) {
+      if (!localStorage.getItem("userId")){
         window.location.href = "login.html";
       }
 
@@ -583,15 +583,15 @@ dashboard
       document.getElementById("accountPhone").innerText = "+91 " + phone;
 
       function newDesign() {
-        location.href = "NewDesign.html";
+        location.href = "design.html";
       }
 
       function measurements() {
-        location.href = "Measurements.html";
+        location.href = "measurements.html";
       }
 
       function historyPage() {
-        location.href = "History.html";
+        location.href = "history.html";
       }
 
       function logout() {
@@ -600,12 +600,11 @@ dashboard
       }
 
       const templates = [
-        { name: "Ethnic Wear", img: "images/lehanga.jpeg" },
-        { name: "Casual Wear", img: "images/kurthi.jpeg" },
-        { name: "Party Wear", img: "images/sharara.jpeg" },
-        { name: "Traditional", img: "images/halfsaree.jpeg" },
-       
-      ];
+  { name: "Ethnic Wear", img: "../images/lehanga.jpeg" },
+  { name: "Casual Wear", img: "../images/kurthi.jpeg" },
+  { name: "Party Wear", img: "../images/sharara.jpeg" },
+  { name: "Traditional", img: "../images/halfsaree.jpeg" },
+];
 
       function loadTemplates() {
         const container = document.getElementById("templates");
@@ -676,7 +675,7 @@ dashboard
         const ctx = canvas.getContext("2d");
         ctx.drawImage(video, 0, 0);
 
-        const imageData = canvas.toDataURL("image/png");
+        const imageData = canvas.toDataURL("./image/png");
 
         localStorage.setItem("userImage", imageData);
         localStorage.setItem("selectedCategory", "Custom Search");

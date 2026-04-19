@@ -8,27 +8,138 @@ public class Measurement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+private Long userId;
 
-    private String chest;
-    private String waist;
-    private String hip;
+private String createdAt;
 
-    public Measurement() {}
+// all fields
+private String chestBust;
+private String waistUpper;
+private String hipUpper;
+private String shoulderWidth;
+private String sleeveLength;
+private String armhole;
+private String neck;
+private String garmentLength;
+private String waistPant;
+private String hipLower;
+private String inseamLength;
+private String outseamLength;
+private String thigh;
 
-    public Measurement(String chest, String waist, String hip) {
-        this.chest = chest;
-        this.waist = waist;
-        this.hip = hip;
+private String unit;
+
+// getters & setters
+    public Long getId() {
+        return id;
     }
 
-    public Long getId() { return id; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getChest() { return chest; }
-    public void setChest(String chest) { this.chest = chest; }
+    public Long getUserId() {
+        return userId;
+    }
 
-    public String getWaist() { return waist; }
-    public void setWaist(String waist) { this.waist = waist; }
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
-    public String getHip() { return hip; }
-    public void setHip(String hip) { this.hip = hip; }
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getChestBust() {
+        return chestBust;
+    }
+
+    public void setChestBust(String chestBust) {
+        this.chestBust = chestBust;
+    }
+
+    public String getWaistUpper() {
+        return waistUpper;
+    }
+
+    public void setWaistUpper(String waistUpper) {
+        this.waistUpper = waistUpper;
+    }
+
+    public String getHipUpper() {
+        return hipUpper;
+    }
+
+    public void setHipUpper(String hipUpper) {
+        this.hipUpper = hipUpper;
+    }
+
+    public String getShoulderWidth() {
+        return shoulderWidth;
+    }
+
+    public void setShoulderWidth(String shoulderWidth) {
+        this.shoulderWidth = shoulderWidth;
+    }
+
+    public String getSleeveLength() {
+        return sleeveLength;
+    }
+
+    public void setSleeveLength(String sleeveLength) {
+        this.sleeveLength = sleeveLength;
+    }
+
+    public String getArmhole() {
+        return armhole;
+    }
+
+    public void setArmhole(String armhole) {
+        this.armhole = armhole;
+    }
+
+    public String getNeck() {
+        return neck;
+    }
+
+    public void setNeck(String neck) {
+        this.neck = neck;
+    }
+
+    public String getGarmentLength() {
+        return garmentLength;
+    }
+
+    public void setGarmentLength(String garmentLength) {
+        this.garmentLength = garmentLength;
+    }
+
+    public String getWaistPant() {
+        return waistPant;
+    }
+
+    public void setWaistPant(String waistPant) {
+        this.waistPant = waistPant;
+    }
+
+    public String getHipLower() {
+        return hipLower;
+    }
+
+    public void setHipLower(String hipLower) {
+        this.hipLower = hipLower;
+    }
+
+    public String getInseamLength() {
+        return inseamLength;
+    }
+
+    public void setInseamLength(String inseamLength) {
+        this.inseamLength = inseamLength;
+    }
+    
 }

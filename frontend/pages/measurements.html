@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Measurements - Digital Couture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="../css/measurements.css"> 
+
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <h1>Measurements Section</h1>
+      <button class="btn" onclick="location.href='./dashboard.html'">Dashboard</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <h2>Your Measurement History</h2>
+
+<div id="measurementList"></div>
+
+<button class="btn" onclick="toggleForm()">➕ Add New Measurement</button>
+    <section class="card" id="formSection" style="display:none;">
+      <p class="sub">Enter values in centimeters. You can edit measurements anytime.</p>
+
+      <h2 class="group-title">Upper Body</h2>
+
+      <div class="row">
+        <div class="label">&#128207; Chest / Bust</div>
+        <div class="field-wrap">
+          <input id="chest_bust" type="text" inputmode="decimal" placeholder="Chest/Bust: 36 cm" maxlength="6">
+          <div class="helper">in cm</div>
+          <div class="error" id="errChest_bust"></div>
+        </div>
+        <button class="guide-btn" type="button" onclick="openGuide('chest_bust')" aria-label="Chest/Bust guide">&#10067;</button>
+      </div>
+
+      <div class="row">
+        <div class="label">&#128207; Waist</div>
+        <div class="field-wrap">
+          <input id="waist_upper" type="text" inputmode="decimal" placeholder="Waist: 30 cm" maxlength="6">
+          <div class="helper">in cm</div>
+          <div class="error" id="errWaist_upper"></div>
+        </div>
+        <button class="guide-btn" type="button" onclick="openGuide('waist_upper')" aria-label="Waist guide">&#10067;</button>
+      </div>
+
+      <div class="row">
+        <div class="label">&#128207; Hip</div>
+        <div class="field-wrap">
+          <input id="hip_upper" type="text" inputmode="decimal" placeholder="Hip: 38 cm" maxlength="6">
+          <div class="helper">in cm</div>
+          <div class="error" id="errHip_upper"></div>
+        </div>
+        <button class="guide-btn" type="button" onclick="openGuide('hip_upper')" aria-label="Hip guide">&#10067;</button>
+      </div>
+
+      <div class="row">
+        <div class="label">&#128207; Shoulder Width</div>
+        <div class="field-wrap">
+          <input id="shoulder_width" type="text" inputmode="decimal" placeholder="Shoulder Width: 14 cm" maxlength="6">
+          <div class="helper">in cm</div>
+          <div class="error" id="errShoulder_width"></div>
+        </div>
+        <button class="guide-btn" type="button" onclick="openGuide('shoulder_width')" aria-label="Shoulder Width guide">&#10067;</button>
+      </div>
+
+      <div class="row">
+        <div class="label">&#128207; Sleeve Length</div>
+        <div class="field-wrap">
+          <input id="sleeve_length" type="text" inputmode="decimal" placeholder="Sleeve Length: 22 cm" maxlength="6">
+          <div class="helper">in cm</div>
+          <div class="error" id="errSleeve_length"></div>
+        </div>
+        <button class="guide-btn" type="button" onclick="openGuide('sleeve_length')" aria-label="Sleeve Length guide">&#10067;</button>
+      </div>
+
+      <div class="row">
+        <div class="label">&#128207; Armhole</div>
+        <div class="field-wrap">
+          <input id="armhole" type="text" inputmode="decimal" placeholder="Armhole: 16 cm" maxlength="6">
+          <div class="helper">in cm</div>
+          <div class="error" id="errArmhole"></div>
+        </div>
+        <button class="guide-btn" type="button" onclick="openGuide('armhole')" aria-label="Armhole guide">&#10067;</button>
+      </div>
+
+      <div class="row">
+        <div class="label">&#128207; Neck</div>
+        <div class="field-wrap">
+          <input id="neck" type="text" inputmode="decimal" placeholder="Neck: 13 cm" maxlength="6">
+          <div class="helper">in cm</div>
+          <div class="error" id="errNeck"></div>
+        </div>
+        <button class="guide-btn" type="button" onclick="openGuide('neck')" aria-label="Neck guide">&#10067;</button>
+      </div>
+
+      <div class="row">
+        <div class="label">&#128207; Garment Length</div>
+        <div class="field-wrap">
+          <input id="garment_length" type="text" inputmode="decimal" placeholder="Garment Length: 110 cm" maxlength="6">
+          <div class="helper">in cm</div>
+          <div class="error" id="errGarment_length"></div>
+        </div>
+        <button class="guide-btn" type="button" onclick="openGuide('garment_length')" aria-label="Garment Length guide">&#10067;</button>
+      </div>
+
+      <h2 class="group-title">Lower Body</h2>
+
+      <div class="row">
+        <div class="label">&#128207; Waist (Pant)</div>
+        <div class="field-wrap">
+          <input id="waist_pant" type="text" inputmode="decimal" placeholder="Waist (Pant): 32 cm" maxlength="6">
+          <div class="helper">in cm</div>
+          <div class="error" id="errWaist_pant"></div>
+        </div>
+        <button class="guide-btn" type="button" onclick="openGuide('waist_pant')" aria-label="Waist (Pant) guide">&#10067;</button>
+      </div>
+
+      <div class="row">
+        <div class="label">&#128207; Hip</div>
+        <div class="field-wrap">
+          <input id="hip_lower" type="text" inputmode="decimal" placeholder="Hip: 38 cm" maxlength="6">
+          <div class="helper">in cm</div>
+          <div class="error" id="errHip_lower"></div>
+        </div>
+        <button class="guide-btn" type="button" onclick="openGuide('hip_lower')" aria-label="Hip guide">&#10067;</button>
+      </div>
+
+      <div class="row">
+        <div class="label">&#128207; Inseam Length</div>
+        <div class="field-wrap">
+          <input id="inseam_length" type="text" inputmode="decimal" placeholder="Inseam Length: 76 cm" maxlength="6">
+          <div class="helper">in cm</div>
+          <div class="error" id="errInseam_length"></div>
+        </div>
+        <button class="guide-btn" type="button" onclick="openGuide('inseam_length')" aria-label="Inseam Length guide">&#10067;</button>
+      </div>
+
+      <div class="row">
+        <div class="label">&#128207; Outseam Length</div>
+        <div class="field-wrap">
+          <input id="outseam_length" type="text" inputmode="decimal" placeholder="Outseam Length: 102 cm" maxlength="6">
+          <div class="helper">in cm</div>
+          <div class="error" id="errOutseam_length"></div>
+        </div>
+        <button class="guide-btn" type="button" onclick="openGuide('outseam_length')" aria-label="Outseam Length guide">&#10067;</button>
+      </div>
+
+      <div class="row">
+        <div class="label">&#128207; Thigh</div>
+        <div class="field-wrap">
+          <input id="thigh" type="text" inputmode="decimal" placeholder="Thigh: 22 cm" maxlength="6">
+          <div class="helper">in cm</div>
+          <div class="error" id="errThigh"></div>
+        </div>
+        <button class="guide-btn" type="button" onclick="openGuide('thigh')" aria-label="Thigh guide">&#10067;</button>
+      </div>
+
+      <button class="save-btn" type="button" onclick="saveMeasurements()">Save Measurements</button>
+      <p id="status"></p>
+    </section>
+  </main>
+
+  <div class="guide-modal" id="guideModal">
+    <section class="guide-card" role="dialog" aria-label="Measurement Guide">
+      <header class="guide-head">
+        <h3 id="guideTitle">How to Measure</h3>
+        <button class="close-x" type="button" onclick="closeGuide()">�</button>
+      </header>
+      <div class="guide-body">
+        <img src="measumentsimg.jpeg" alt="Measurement reference image">
+        <p class="guide-text" id="guideText"></p>
+      </div>
+    </section>
+  </div>
+<script type="module">
+
+import { getMeasurements, saveMeasurement } from "../js/measurement-api.js";
+
+const userId = localStorage.getItem("userId");
+
+async function loadMeasurements() {
+  const data = await getMeasurements(userId);
+
+  const list = document.getElementById("measurementList");
+  list.innerHTML = "";
+
+  data.forEach((m, index) => {
+    list.innerHTML += `
+      <div style="background:white; padding:15px; margin:10px; border-radius:10px;">
+        <b>${index === 0 ? "⭐ Latest" : "📜 Previous"}</b><br>
+        Date: ${m.createdAt}<br>
+        Waist: ${m.waistUpper}
+      </div>
+    `;
+  });
+}
+
+function toggleForm() {
+  const form = document.getElementById("formSection");
+  form.style.display = form.style.display === "none" ? "block" : "none";
+}
+
+function saveMeasurements() {
+
+  const data = {
+    userId: userId,
+    chestBust: document.getElementById("chest_bust").value,
+    waistUpper: document.getElementById("waist_upper").value,
+    hipUpper: document.getElementById("hip_upper").value,
+    shoulderWidth: document.getElementById("shoulder_width").value,
+    sleeveLength: document.getElementById("sleeve_length").value,
+    armhole: document.getElementById("armhole").value,
+    neck: document.getElementById("neck").value,
+    garmentLength: document.getElementById("garment_length").value,
+    waistPant: document.getElementById("waist_pant").value,
+    hipLower: document.getElementById("hip_lower").value,
+    inseamLength: document.getElementById("inseam_length").value,
+    outseamLength: document.getElementById("outseam_length").value,
+    thigh: document.getElementById("thigh").value,
+    unit: "cm",
+    createdAt: new Date().toISOString()
+  };
+
+  saveMeasurement(data)
+    .then(() => {
+      alert("Saved!");
+      loadMeasurements();
+      document.getElementById("formSection").style.display = "none";
+    })
+    .catch(() => {
+      alert("Error saving");
+    });
+}
+
+loadMeasurements();
+
+</script>
+</body>
+</html>
