@@ -622,7 +622,7 @@ dashboard
 
       function selectCategory(name) {
         localStorage.setItem("selectedCategory", name);
-        window.location.href = "design.html";
+        window.location.href = "studio.html";
       }
 
       function openCameraOptions() {
@@ -645,7 +645,7 @@ dashboard
           reader.onload = function (event) {
             localStorage.setItem("userImage", event.target.result);
             localStorage.setItem("selectedCategory", "Custom Search");
-            window.location.href = "design.html";
+            window.location.href = "studio.html";
           };
           reader.readAsDataURL(file);
         }
@@ -685,7 +685,7 @@ dashboard
           stream.getTracks().forEach((track) => track.stop());
         }
 
-        window.location.href = "design.html";
+        window.location.href = "studio.html";
       }
 
       function account() {
@@ -720,7 +720,7 @@ dashboard
         img: img
       }));
 
-  window.location.href = "design.html";
+  window.location.href = "studio.html";
   }
 
       window.onload = loadTemplates;

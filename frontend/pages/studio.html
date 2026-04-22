@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Customization Studio - Digital Couture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #2a9d8f;
+    --primary-dark: #217e72;
+    --bg: #f4f7fa;
+    --card: #ffffff;
+    --ink: #1f2b31;
+    --muted: #61707a;
+    --line: #dde7ec;
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: "Poppins", "Segoe UI", sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(circle at 8% 8%, #ddf3ef 0%, transparent 28%),
+      radial-gradient(circle at 88% 92%, #dde8fb 0%, transparent 30%),
+      var(--bg);
+    padding-bottom: 96px;
+  }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(244, 247, 250, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .topbar-inner {
+    width: min(1200px, 94vw);
+    margin: 0 auto;
+    min-height: 72px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .title {
+    font-size: clamp(1.1rem, 2.3vw, 1.45rem);
+    color: var(--primary-dark);
+    margin: 0;
+  }
+
+  .top-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--ink);
+    border-radius: 999px;
+    padding: 8px 13px;
+    font: inherit;
+    font-weight: 500;
+    cursor: pointer;
+    transition: .2s ease;
+  }
+
+  .btn:hover { transform: translateY(-1px); }
+
+  .container {
+    width: min(1200px, 94vw);
+    margin: 20px auto 26px;
+    display: grid;
+    grid-template-columns: 1fr 1.15fr;
+    gap: 18px;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: 0 10px 26px rgba(31, 43, 49, 0.08);
+  }
+
+  .left {
+    padding: 16px;
+    position: sticky;
+    top: 90px;
+    height: fit-content;
+  }
+
+  .img-wrap {
+    border-radius: 12px;
+    overflow: hidden;
+    background: #edf3f5;
+    border: 1px solid var(--line);
+  }
+
+  .img-wrap img {
+    width: 100%;
+    height: clamp(250px, 42vw, 430px);
+    object-fit: cover;
+    display: block;
+  }
+
+  .product-meta {
+    margin-top: 12px;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .product-name {
+    margin: 0;
+    font-size: 1.05rem;
+  }
+
+  .price {
+    color: var(--primary-dark);
+    font-weight: 700;
+  }
+
+  .product-switch {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .switch-item {
+    border: 1px solid var(--line);
+    background: #fff;
+    border-radius: 10px;
+    padding: 9px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 0.88rem;
+    transition: .2s ease;
+  }
+
+  .switch-item:hover,
+  .switch-item.active {
+    border-color: var(--primary);
+    background: #ebf8f6;
+    color: var(--primary-dark);
+  }
+
+  .summary {
+    margin-top: 14px;
+    border: 1px solid #cde7e2;
+    background: #f2fbf9;
+    border-radius: 12px;
+    padding: 12px;
+  }
+
+  .summary h3 {
+    margin: 0 0 8px;
+    font-size: 0.96rem;
+    color: var(--primary-dark);
+  }
+
+  .summary-line {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .right {
+    padding: 14px;
+    display: grid;
+    gap: 12px;
+    align-content: start;
+  }
+
+  .accordion {
+    overflow: hidden;
+  }
+
+  .acc-head {
+    width: 100%;
+    border: 0;
+    background: #fff;
+    text-align: left;
+    padding: 14px;
+    font: inherit;
+    font-weight: 600;
+    color: var(--ink);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .acc-head .icon {
+    margin-right: 8px;
+  }
+
+  .acc-head .left-label {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .acc-head .chev {
+    transition: transform .25s ease;
+    color: var(--muted);
+  }
+
+  .accordion.open .chev { transform: rotate(180deg); }
+
+  .acc-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .28s ease;
+    border-top: 1px solid transparent;
+  }
+
+  .accordion.open .acc-body {
+    border-top-color: var(--line);
+  }
+
+  .acc-inner { padding: 14px; }
+
+  .fabric-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 9px;
+  }
+
+  .fabric-card {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fff;
+    padding: 10px;
+    cursor: pointer;
+    transition: .2s ease;
+    position: relative;
+  }
+
+  .fabric-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(42, 157, 143, 0.15);
+  }
+
+  .fabric-card.active {
+    border-color: var(--primary);
+    background: #eefaf8;
+  }
+
+  .badge {
+    display: inline-block;
+    margin-top: 4px;
+    font-size: 0.72rem;
+    color: #0f665e;
+    background: #dbf5f0;
+    border-radius: 999px;
+    padding: 2px 7px;
+  }
+
+  .ai-note {
+    margin: 0 0 10px;
+    background: #eef8ff;
+    border: 1px solid #cde3ff;
+    color: #2a5078;
+    border-radius: 9px;
+    padding: 9px;
+    font-size: 0.88rem;
+  }
+
+  .color-row {
+    display: grid;
+    grid-template-columns: 68px 1fr;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .color-presets {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .color-dot {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px #cedbe1;
+    cursor: pointer;
+    transition: transform .2s ease;
+  }
+
+  .color-dot:hover,
+  .color-dot.active {
+    transform: scale(1.14);
+    box-shadow: 0 0 0 2px var(--primary);
+  }
+
+  .measurement-pill {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    border: 1px solid #cbe9e3;
+    background: #edf9f6;
+    color: #1c7469;
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 0.85rem;
+    margin-top: 8px;
+  }
+
+  .primary-btn {
+    border: 0;
+    border-radius: 10px;
+    background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+    color: #fff;
+    padding: 11px 14px;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .primary-btn:hover { filter: brightness(1.06); }
+
+  .orders-panel,
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .orders-panel {
+    z-index: 40;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .orders-sheet {
+    width: min(400px, 94vw);
+    height: 100%;
+    background: #fff;
+    border-left: 1px solid var(--line);
+    box-shadow: -18px 0 40px rgba(31, 43, 49, 0.2);
+    transform: translateX(100%);
+    transition: transform .28s ease;
+    display: grid;
+    grid-template-rows: auto 1fr;
+  }
+
+  .orders-panel.open {
+    pointer-events: auto;
+    background: rgba(21, 35, 45, 0.35);
+  }
+
+  .orders-panel.open .orders-sheet {
+    transform: translateX(0);
+  }
+
+  .orders-head {
+    padding: 14px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .orders-list {
+    padding: 14px;
+    overflow: auto;
+    display: grid;
+    gap: 10px;
+    align-content: start;
+  }
+
+  .order-item {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px;
+    background: #fff;
+    cursor: pointer;
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+
+  .order-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(31, 43, 49, 0.12);
+  }
+
+  .order-item-top {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .order-item-top img {
+    width: 56px;
+    height: 56px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid var(--line);
+  }
+
+  .order-item .meta {
+    font-size: 0.84rem;
+    color: var(--muted);
+    margin-top: 5px;
+  }
+
+  .modal-overlay {
+    z-index: 50;
+    background: rgba(16, 35, 42, 0.5);
+    display: grid;
+    place-items: center;
+    opacity: 0;
+    transition: opacity .24s ease;
+  }
+
+  .modal-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .modal {
+    width: min(430px, 92vw);
+    background: #fff;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    box-shadow: 0 18px 45px rgba(31, 43, 49, 0.2);
+    padding: 16px;
+    transform: translateY(10px) scale(0.98);
+    transition: .22s ease;
+  }
+
+  .modal-overlay.open .modal {
+    transform: translateY(0) scale(1);
+  }
+
+  .field { margin-bottom: 10px; }
+
+  .field label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  .field input {
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px;
+    font: inherit;
+  }
+
+  .measure-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .measure-options .btn {
+    border-radius: 10px;
+    padding: 9px 10px;
+  }
+
+  .dynamic-fields {
+    display: grid;
+    gap: 10px;
+  }
+
+  .fixed-order {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 30;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border-top: 1px solid var(--line);
+    padding: 10px 12px;
+  }
+
+  .fixed-order-inner {
+    width: min(1200px, 94vw);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .fixed-meta {
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  .fixed-order .primary-btn {
+    min-width: 180px;
+    font-size: 1rem;
+    padding: 12px 16px;
+  }
+
+  .toast {
+    position: fixed;
+    top: 86px;
+    right: 16px;
+    background: #0f675e;
+    color: #fff;
+    padding: 10px 13px;
+    border-radius: 10px;
+    z-index: 80;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: .2s ease;
+    pointer-events: none;
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 980px) {
+    .container { grid-template-columns: 1fr; }
+    .left { position: static; }
+  }
+
+  @media (max-width: 580px) {
+    .fixed-order-inner {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .fixed-order .primary-btn { width: 100%; }
+  }
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <h1 class="title">AI Customization Studio</h1>
+      <div class="top-actions">
+        <button class="btn" onclick="location.href='Dashboard.html'">Dashboard</button>
+        <button class="btn" onclick="location.href='products.html'">Products</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card left">
+      <div class="img-wrap">
+        <img id="productImage" src="../images/kurthi.jpeg" alt="Selected Product">
+      </div>
+
+      <div class="product-meta">
+        <h2 class="product-name" id="productName">Kurti</h2>
+        <div class="price" id="productPrice">INR 999</div>
+      </div>
+
+      <div class="product-switch" id="productSwitch"></div>
+
+      <section class="summary">
+        <h3>Customization Summary</h3>
+        <div class="summary-line" id="summaryFabric">Fabric: Not selected</div>
+        <div class="summary-line" id="summaryColor">Color: #2a9d8f</div>
+        <div class="summary-line" id="summaryMeasurement">Measurements: Not added</div>
+      </section>
+    </section>
+
+    <section class="right">
+      <article class="card accordion open" data-accordion>
+        <button class="acc-head" type="button">
+          <span class="left-label"><span class="icon">??</span> Fabric Selection</span>
+          <span class="chev">?</span>
+        </button>
+        <div class="acc-body">
+          <div class="acc-inner">
+            <p class="ai-note" id="aiDetectNote" style="display:none;"></p>
+            <div class="fabric-grid" id="fabricGrid"></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card accordion" data-accordion>
+        <button class="acc-head" type="button">
+          <span class="left-label"><span class="icon">??</span> Measurements</span>
+          <span class="chev">?</span>
+        </button>
+        <div class="acc-body">
+          <div class="acc-inner">
+            <button class="primary-btn" type="button" id="openMeasurementBtn">Add / Edit Measurements</button>
+            <div class="measurement-pill" id="measurementStatus">Not added yet</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card accordion" data-accordion>
+        <button class="acc-head" type="button" id="openOrdersBtn">
+          <span class="left-label"><span class="icon">??</span> Previous Orders</span>
+          <span class="chev">?</span>
+        </button>
+        <div class="acc-body">
+          <div class="acc-inner">
+            <p style="margin:0;color:var(--muted);font-size:.92rem;">View your previous customizations in a sliding panel.</p>
+            <button class="btn" style="margin-top:10px;" type="button" onclick="openOrdersPanel()">Open Orders</button>
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <div class="orders-panel" id="ordersPanel" onclick="overlayClose(event)">
+    <aside class="orders-sheet" role="dialog" aria-label="Previous Orders">
+      <header class="orders-head">
+        <strong>Previous Orders</strong>
+        <button class="btn" type="button" onclick="closeOrdersPanel()">Close</button>
+      </header>
+      <div class="orders-list" id="ordersList"></div>
+    </aside>
+  </div>
+
+  <div class="modal-overlay" id="measurementModal">
+    <div class="modal" role="dialog" aria-label="Measurement Form">
+      <h3 style="margin:0 0 12px;color:var(--primary-dark);">Enter Measurements</h3>
+
+      <div class="measure-options">
+        <button class="btn" type="button" onclick="importMeasurements()">Import</button>
+        <button class="btn" type="button" onclick="prepareCreateMeasurement()">Create New</button>
+      </div>
+      <div id="measureHelpText" style="margin:0 0 10px;color:var(--muted);font-size:.88rem;">
+        Choose Import to load latest order measurement or Create New to enter values.
+      </div>
+      <div id="dynamicMeasurementFields" class="dynamic-fields"></div>
+
+      <div style="display:flex;gap:10px;justify-content:flex-end;">
+        <button class="btn" type="button" onclick="closeMeasurementModal()">Cancel</button>
+        <button class="primary-btn" type="button" onclick="saveMeasurements()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="fixed-order">
+    <div class="fixed-order-inner">
+      <div class="fixed-meta" id="fixedSummary">Fabric: -- | Color: #2a9d8f | Measurements: --</div>
+      <button class="primary-btn" type="button" onclick="placeOrder()">Place Order</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+
+    const storedProduct = JSON.parse(localStorage.getItem("selectedProduct"));
+
+    if (!localStorage.getItem("userPhone")) {
+      window.location.href = "login.html";
+    }
+
+    const products = {
+      Kurti: { name: "Kurti", price: 999, img: "../images/kurthi.jpeg" },
+      Lehenga: { name: "Lehenga", price: 2999, img: "../images/lehanga.jpeg" },
+      Sharara: { name: "Sharara", price: 2499, img: "../images/sharara.jpeg" },
+      "Half Saree": { name: "Half Saree", price: 2199, img: "../images/halfsaree.jpeg" }
+    };
+
+    const fabricMap = {
+      Kurti: [
+        { name: "Cotton", ai: true },
+        { name: "Rayon", ai: false },
+        { name: "Linen", ai: false },
+        { name: "Chanderi", ai: false }
+      ],
+      Lehenga: [
+        { name: "Silk", ai: true },
+        { name: "Velvet", ai: false },
+        { name: "Georgette", ai: false },
+        { name: "Net", ai: false }
+      ],
+      Sharara: [
+        { name: "Georgette", ai: true },
+        { name: "Crepe", ai: false },
+        { name: "Silk Blend", ai: false },
+        { name: "Cotton Satin", ai: false }
+      ],
+      "Half Saree": [
+        { name: "Cotton", ai: true },
+        { name: "Pattu Silk", ai: false },
+        { name: "Art Silk", ai: false },
+        { name: "Linen Silk", ai: false }
+      ]
+    };
+
+    const previousDesign = JSON.parse(localStorage.getItem("design") || "null");
+    //const storedProduct = JSON.parse(localStorage.getItem("selectedProduct") || "null");
+
+    let selectedProductName = storedProduct?.name || previousDesign?.template || "Kurti";
+    if (!products[selectedProductName]) selectedProductName = "Kurti";
+
+    let selectedFabric = "";
+    let selectedColor = "#2a9d8f";
+    let selectedMeasurements = JSON.parse(localStorage.getItem("tempMeasurements") || "null");
+    let measurementMode = "create";
+    let currentMeasurementFields = [];
+
+    const productImage = document.getElementById("productImage");
+    const productName = document.getElementById("productName");
+    const productPrice = document.getElementById("productPrice");
+    const productSwitch = document.getElementById("productSwitch");
+    const fabricGrid = document.getElementById("fabricGrid");
+    const aiDetectNote = document.getElementById("aiDetectNote");
+    const measurementStatus = document.getElementById("measurementStatus");
+    const measurementModal = document.getElementById("measurementModal");
+    const dynamicMeasurementFields = document.getElementById("dynamicMeasurementFields");
+    const measureHelpText = document.getElementById("measureHelpText");
+    const ordersPanel = document.getElementById("ordersPanel");
+    const ordersList = document.getElementById("ordersList");
+    const toast = document.getElementById("toast");
+
+    const fullMeasurementFields = [
+  "chest_bust",
+  "waist_upper",
+  "hip_upper",
+  "shoulder_width",
+  "sleeve_length",
+  "armhole",
+  "neck",
+  "garment_length",
+  "waist_pant",
+  "hip_lower",
+  "inseam_length",
+  "outseam_length",
+  "thigh"
+];
+
+const garmentMeasurementMap = {
+  Kurti: [
+    "chest_bust",
+    "waist_upper",
+    "hip_upper",
+    "shoulder_width",
+    "sleeve_length",
+    "armhole",
+    "neck",
+    "garment_length"
+  ],
+
+  Lehenga: [
+    "waist_pant",
+    "hip_lower",
+    "garment_length"
+  ],
+
+  Sharara: [
+    "waist_pant",
+    "hip_lower",
+    "inseam_length",
+    "outseam_length",
+    "thigh"
+  ],
+
+  "Half Saree": [
+    "chest_bust",
+    "waist_upper",
+    "hip_upper",
+    "garment_length"
+  ]
+};
+    function labelForField(fieldKey) {
+  return fieldKey.replaceAll("_", " ").toUpperCase();
+}
+
+    function renderDynamicMeasurementFields() {
+  currentMeasurementFields = garmentMeasurementMap[selectedProductName] || fullMeasurementFields;
+      dynamicMeasurementFields.innerHTML = "";
+
+      const current = selectedMeasurements || {};
+      currentMeasurementFields.forEach((key) => {
+        dynamicMeasurementFields.innerHTML += `
+          <div class="field">
+            <label for="measure_${key}">${labelForField(key)}</label>
+            <input type="number" id="measure_${key}" min="1" value="${current[key] || ""}">
+          </div>
+        `;
+      });
+    }
+
+    function showToast(message, isError) {
+      toast.innerText = message;
+      toast.style.background = isError ? "#b64040" : "#0f675e";
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 1800);
+    }
+
+    function updateLeftProduct() {
+      const p = products[selectedProductName];
+      productImage.src = p.img;
+      productName.innerText = p.name;
+      productPrice.innerText = "INR " + p.price;
+    }
+
+    function renderProductSwitch() {
+      productSwitch.innerHTML = "";
+      Object.keys(products).forEach(name => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "switch-item" + (name === selectedProductName ? " active" : "");
+        btn.innerText = name;
+        btn.onclick = () => {
+          selectedProductName = name;
+          selectedFabric = "";
+          localStorage.setItem("selectedProduct", JSON.stringify(products[name]));
+          updateLeftProduct();
+          renderProductSwitch();
+          renderFabrics();
+          updateSummary();
+        };
+        productSwitch.appendChild(btn);
+      });
+    }
+
+    function renderFabrics() {
+      const fabrics = fabricMap[selectedProductName] || [];
+      fabricGrid.innerHTML = "";
+
+      fabrics.forEach(f => {
+        const item = document.createElement("button");
+        item.type = "button";
+        item.className = "fabric-card" + (selectedFabric === f.name ? " active" : "");
+        item.innerHTML = `<strong>${f.name}</strong>${f.ai ? '<div class="badge">AI Recommended</div>' : ''}`;
+        item.onclick = () => {
+          selectedFabric = f.name;
+          renderFabrics();
+          updateSummary();
+        };
+        fabricGrid.appendChild(item);
+      });
+
+      const uploadedImage = localStorage.getItem("uploadedImage");
+      if (uploadedImage) {
+        aiDetectNote.style.display = "block";
+        aiDetectNote.innerText = "AI Detected: Chikankari on Cotton";
+        if (!selectedFabric) selectedFabric = "Cotton";
+      } else {
+        aiDetectNote.style.display = "none";
+      }
+    }
+
+    function openMeasurementModal() {
+      measurementModal.classList.add("open");
+      measurementMode = "create";
+      measureHelpText.innerText = "Choose Import to load latest order measurement or Create New to enter values.";
+      renderDynamicMeasurementFields();
+    }
+
+    function closeMeasurementModal() {
+      measurementModal.classList.remove("open");
+    }
+
+    function prepareCreateMeasurement() {
+    renderDynamicMeasurementFields();
+}
+
+  function importMeasurements() {
+
+    const userId = localStorage.getItem("userId");
+
+    fetch(`http://localhost:8080/api/measurement/${userId}`)
+    .then(res => res.json())
+    .then(data => {
+
+      if (!data || data.length === 0) {
+        showToast("No saved measurements found", true);
+        return;
+      }
+
+      dynamicMeasurementFields.innerHTML = "<h4>Select Measurement</h4>";
+
+      data.forEach(m => {
+        const div = document.createElement("div");
+
+        div.style = "border:1px solid #ccc; padding:10px; margin:5px; cursor:pointer; border-radius:8px;";
+
+        div.innerHTML = `
+          Chest: ${m.chestBust || '-'} | 
+          Waist: ${m.waistUpper || '-'} | 
+          Hip: ${m.hipUpper || '-'}
+        `;
+
+        div.onclick  = () => selectMeasurement(m);
+
+        dynamicMeasurementFields.appendChild(div);
+      });
+
+    })
+    .catch(() => showToast("Error loading measurements", true));
+  }
+
+  function selectMeasurement(m) {
+
+  // Convert backend → frontend format
+  selectedMeasurements = {
+    chest_bust: m.chestBust,
+    waist_upper: m.waistUpper,
+    hip_upper: m.hipUpper,
+    shoulder_width: m.shoulderWidth,
+    sleeve_length: m.sleeveLength,
+    armhole: m.armhole,
+    neck: m.neck,
+    garment_length: m.garmentLength,
+    waist_pant: m.waistPant,
+    hip_lower: m.hipLower,
+    inseam_length: m.inseamLength,
+    outseam_length: m.outseamLength,
+    thigh: m.thigh
+  };
+
+  localStorage.setItem("tempMeasurements", JSON.stringify(selectedMeasurements));
+
+  showToast("Measurement selected", false);
+
+  closeMeasurementModal();
+  updateSummary();
+}
+
+    function saveMeasurements() {
+      const payload = {};
+      const fields = garmentMeasurementMap[selectedProductName] || fullMeasurementFields;
+
+      for (const key of fields) {
+        const el = document.getElementById(`measure_${key}`);
+        const val = (el?.value || "").trim();
+        if (!val) {
+          showToast("Please fill all measurement fields.", true);
+          return;
+        }
+        payload[key] = val;
+      }
+
+      selectedMeasurements = payload;
+      localStorage.setItem("tempMeasurements", JSON.stringify(selectedMeasurements));
+      measurementStatus.innerText = "Saved: " + fields.map(k => `${labelForField(k).replace(" (inches)", "")} ${selectedMeasurements[k]}`).join(" | ");
+      closeMeasurementModal();
+      updateSummary();
+    }
+
+    function openOrdersPanel() {
+      renderOrders();
+      ordersPanel.classList.add("open");
+    }
+
+    function closeOrdersPanel() {
+      ordersPanel.classList.remove("open");
+    }
+
+    function overlayClose(event) {
+      if (event.target === ordersPanel) closeOrdersPanel();
+    }
+
+    function renderOrders() {
+      const phone = localStorage.getItem("userPhone");
+      const orders = JSON.parse(localStorage.getItem("orders") || "[]");
+      const userOrders = orders.filter(o => String(o.phone) === String(phone)).reverse();
+
+      ordersList.innerHTML = "";
+      if (userOrders.length === 0) {
+        ordersList.innerHTML = '<p style="margin:0;color:var(--muted);">No previous orders found for this number.</p>';
+        return;
+      }
+
+      userOrders.forEach((order, index) => {
+        const m = order.measurements || {};
+        const card = document.createElement("article");
+        card.className = "order-item";
+        card.innerHTML = `
+          <div class="order-item-top">
+            <img src="${order.image || '../images/kurthi.jpeg'}" alt="${order.product || 'Order'}">
+            <strong>${order.product || 'Order'}</strong>
+          </div>
+          <div class="meta">Fabric: ${order.fabric || '-'}${order.color ? ` | Color: ${order.color}` : ''}</div>
+          <div class="meta">Chest: ${m.chestBust || '-'} | Waist: ${m.waistUpper || '-'} | Length: ${m.garmentLength || '-'}</div>
+          <div class="meta">${order.time}</div>
+        `;
+        card.addEventListener("click", () => loadOrderToStudio(userOrders[index]));
+        ordersList.appendChild(card);
+      });
+    }
+
+    function loadOrderToStudio(order) {
+      if (!order) return;
+
+      if (order.product && products[order.product]) {
+        selectedProductName = order.product;
+      }
+
+      if (order.fabric) {
+        selectedFabric = order.fabric;
+      }
+
+      if (order.measurements) {
+        const filtered = {};
+        const fields = garmentMeasurementMap[selectedProductName] || fullMeasurementFields;
+
+fields.forEach(key => {
+          filtered[key] = order.measurements[key] || "";
+        });
+        selectedMeasurements = filtered;
+        localStorage.setItem("tempMeasurements", JSON.stringify(selectedMeasurements));
+      }
+
+      updateLeftProduct();
+      renderProductSwitch();
+      renderFabrics();
+      updateSummary();
+      closeOrdersPanel();
+      showToast("Previous order loaded.", false);
+    }
+
+    function updateSummary() {
+      const fields = garmentMeasurementMap[selectedProductName] || fullMeasurementFields;
+      const hasMeasurements = selectedMeasurements && fields.some(k => selectedMeasurements[k]);
+      const measurementText = hasMeasurements
+        ? fields.map(k => `${labelForField(k).replace(" (inches)", "")} ${selectedMeasurements[k] || "-"}`).join(" | ")
+        : "Not added";
+
+      document.getElementById("summaryFabric").innerText = "Fabric: " + (selectedFabric || "Not selected");
+      document.getElementById("summaryMeasurement").innerText = "Measurements: " + measurementText;
+      document.getElementById("fixedSummary").innerText = `Fabric: ${selectedFabric || '--'} | Measurements: ${hasMeasurements ? measurementText : '--'}`;
+
+      if (hasMeasurements) {
+        measurementStatus.innerText = `Saved: ${measurementText}`;
+      }
+    }
+
+    function placeOrder() {
+      if (!selectedFabric) {
+        showToast("Please select fabric before placing order.", true);
+        return;
+      }
+
+      const required = garmentMeasurementMap[selectedProductName] || fullMeasurementFields;
+      const hasRequiredMeasurements = selectedMeasurements && required.every(k => selectedMeasurements[k]);
+      if (!hasRequiredMeasurements) {
+        showToast("Please add measurements before placing order.", true);
+        return;
+      }
+
+      const phone = localStorage.getItem("userPhone");
+      const product = products[selectedProductName];
+
+      const order = {
+        id: Date.now(),
+        phone,
+        product: product.name,
+        price: product.price,
+        image: product.img,
+        fabric: selectedFabric,
+        color: selectedColor,
+        measurements: selectedMeasurements,
+        time: new Date().toLocaleString()
+      };
+
+      const orders = JSON.parse(localStorage.getItem("orders") || "[]");
+      orders.push(order);
+      localStorage.setItem("orders", JSON.stringify(orders));
+
+      const design = {
+        template: order.product,
+        fabric: order.fabric,
+        style: "Customized",
+        color: order.color,
+        time: order.time
+      };
+
+      const designs = JSON.parse(localStorage.getItem("designs") || "[]");
+      designs.push(design);
+      localStorage.setItem("design", JSON.stringify(design));
+      localStorage.setItem("designs", JSON.stringify(designs));
+      localStorage.setItem("lastViewed", JSON.stringify(design));
+
+      showToast("Order placed successfully.", false);
+      renderOrders();
+    }
+
+    function initAccordion() {
+      document.querySelectorAll("[data-accordion]").forEach(acc => {
+        const head = acc.querySelector(".acc-head");
+        const body = acc.querySelector(".acc-body");
+
+        function setHeight() {
+          body.style.maxHeight = acc.classList.contains("open") ? body.scrollHeight + "px" : "0px";
+        }
+
+        setTimeout(setHeight, 0);
+        window.addEventListener("resize", setHeight);
+
+        head.addEventListener("click", () => {
+          acc.classList.toggle("open");
+          setHeight();
+        });
+      });
+    }
+
+    document.getElementById("openMeasurementBtn").addEventListener("click", openMeasurementModal);
+    document.getElementById("openOrdersBtn").addEventListener("click", openOrdersPanel);
+
+    measurementModal.addEventListener("click", (e) => {
+      if (e.target === measurementModal) closeMeasurementModal();
+    });
+
+    window.openOrdersPanel = openOrdersPanel;
+    window.closeOrdersPanel = closeOrdersPanel;
+    window.closeMeasurementModal = closeMeasurementModal;
+    window.prepareCreateMeasurement = prepareCreateMeasurement;
+    window.importMeasurements = importMeasurements;
+    window.saveMeasurements = saveMeasurements;
+    window.overlayClose = overlayClose;
+    window.placeOrder = placeOrder;
+
+    updateLeftProduct();
+    renderProductSwitch();
+    renderFabrics();
+    updateSummary();
+    initAccordion();
+  </script>
+</body>
+</html>
