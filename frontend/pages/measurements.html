@@ -180,34 +180,40 @@
     </section>
   </div>
 <script type="module">
+  console.log("JS IS RUNNING");
 
 import { getMeasurements, saveMeasurement } from "../js/measurement-api.js";
 
 const userId = localStorage.getItem("userId");
 
 async function loadMeasurements() {
+  const userId = localStorage.getItem("userId");
   const data = await getMeasurements(userId);
 
   const list = document.getElementById("measurementList");
   list.innerHTML = "";
 
+  if (!data || data.length === 0) {
+    list.innerHTML = "<p>No measurements found</p>";
+    return;
+  }
+
   data.forEach((m, index) => {
     list.innerHTML += `
       <div style="background:white; padding:15px; margin:10px; border-radius:10px;">
         <b>${index === 0 ? "⭐ Latest" : "📜 Previous"}</b><br>
-        Date: ${m.createdAt}<br>
-        Waist: ${m.waistUpper}
+        Date: ${m.createdAt ? m.createdAt.split("T")[0] : "No date"}<br>
+        Waist: ${m.waistUpper || "-"}
       </div>
     `;
   });
 }
-
-function toggleForm() {
+window.toggleForm = function () {
   const form = document.getElementById("formSection");
   form.style.display = form.style.display === "none" ? "block" : "none";
-}
+};
 
-function saveMeasurements() {
+window.saveMeasurements = function () {
 
   const data = {
     userId: userId,
@@ -237,9 +243,39 @@ function saveMeasurements() {
     .catch(() => {
       alert("Error saving");
     });
-}
+};
 
-loadMeasurements();
+  const data = {
+    userId: userId,
+    chestBust: document.getElementById("chest_bust").value,
+    waistUpper: document.getElementById("waist_upper").value,
+    hipUpper: document.getElementById("hip_upper").value,
+    shoulderWidth: document.getElementById("shoulder_width").value,
+    sleeveLength: document.getElementById("sleeve_length").value,
+    armhole: document.getElementById("armhole").value,
+    neck: document.getElementById("neck").value,
+    garmentLength: document.getElementById("garment_length").value,
+    waistPant: document.getElementById("waist_pant").value,
+    hipLower: document.getElementById("hip_lower").value,
+    inseamLength: document.getElementById("inseam_length").value,
+    outseamLength: document.getElementById("outseam_length").value,
+    thigh: document.getElementById("thigh").value,
+    unit: "cm",
+    createdAt: new Date().toISOString()
+  };
+
+  saveMeasurement(data)
+    .then(() => {
+      alert("Saved!");
+      loadMeasurements();
+      document.getElementById("formSection").style.display = "none";
+    })
+    .catch(() => {
+      alert("Error saving");
+    });
+
+
+window.onload = loadMeasurements;
 
 </script>
 </body>

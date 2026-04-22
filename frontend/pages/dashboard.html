@@ -596,15 +596,16 @@ dashboard
 
       function logout() {
         localStorage.removeItem("userPhone");
+        localStorage.removeItem("userId"); // 🔥 add this
         location.href = "login.html";
       }
 
       const templates = [
-  { name: "Ethnic Wear", img: "../images/lehanga.jpeg" },
-  { name: "Casual Wear", img: "../images/kurthi.jpeg" },
-  { name: "Party Wear", img: "../images/sharara.jpeg" },
-  { name: "Traditional", img: "../images/halfsaree.jpeg" },
-];
+        { name: "Ethnic Wear", img: "../images/lehanga.jpeg" },
+        { name: "Casual Wear", img: "../images/kurthi.jpeg" },
+        { name: "Party Wear", img: "../images/sharara.jpeg" },
+        { name: "Traditional", img: "../images/halfsaree.jpeg" }, 
+      ];
 
       function loadTemplates() {
         const container = document.getElementById("templates");
@@ -612,7 +613,7 @@ dashboard
 
         templates.forEach((t) => {
           container.innerHTML += `
-            <div class="template-card" onclick="selectCategory('${t.name}')">
+            <div class="template-card" onclick="newDesignWithTemplate('${t.name}', '${t.img}')">
               <img src="${t.img}" alt="${t.name}">
               <p>${t.name}</p>
             </div>`;
@@ -621,7 +622,7 @@ dashboard
 
       function selectCategory(name) {
         localStorage.setItem("selectedCategory", name);
-        window.location.href = "products.html";
+        window.location.href = "design.html";
       }
 
       function openCameraOptions() {
@@ -644,7 +645,7 @@ dashboard
           reader.onload = function (event) {
             localStorage.setItem("userImage", event.target.result);
             localStorage.setItem("selectedCategory", "Custom Search");
-            window.location.href = "products.html";
+            window.location.href = "design.html";
           };
           reader.readAsDataURL(file);
         }
@@ -684,7 +685,7 @@ dashboard
           stream.getTracks().forEach((track) => track.stop());
         }
 
-        window.location.href = "products.html";
+        window.location.href = "design.html";
       }
 
       function account() {
@@ -706,13 +707,21 @@ dashboard
       }
 
       function goOrders() {
-        
-location.href = "orders.html";
+        location.href = "orders.html";
       }
 
       function goSettings() {
         location.href = "settings.html";
       }
+
+      function newDesignWithTemplate(name, img) {
+        localStorage.setItem("selectedProduct", JSON.stringify({
+        name: name,
+        img: img
+      }));
+
+  window.location.href = "design.html";
+  }
 
       window.onload = loadTemplates;
     </script>

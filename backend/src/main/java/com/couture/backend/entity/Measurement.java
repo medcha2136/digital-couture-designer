@@ -141,5 +141,34 @@ private String unit;
     public void setInseamLength(String inseamLength) {
         this.inseamLength = inseamLength;
     }
+
+    public String getOutseamLength() {
+        return outseamLength;
+    }
+
+    public void setOutseamLength(String outseamLength) {
+        this.outseamLength = outseamLength;
+    }
+
+    public String getThigh() {
+        return thigh;
+    }
+
+    public void setThigh(String thigh) {
+        this.thigh = thigh;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    @PrePersist
+    public void setDate() {
+        this.createdAt = java.time.LocalDateTime.now().toString();
+    }
     
 }

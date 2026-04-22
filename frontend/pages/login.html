@@ -113,19 +113,42 @@ document.getElementById("otpBox").style.display="block";
 document.getElementById("msg").innerText="OTP Sent";
 }
 
-function verifyOTP(){
+async function verifyOTP(){
 
-let otp=document.getElementById("otp").value;
+  let otp = document.getElementById("otp").value;
 
-if(otp==generatedOTP){
-localStorage.setItem("userPhone",document.getElementById("phone").value);
-window.location.href="dashboard.html";
-}
-else{
-document.getElementById("msg").innerText="Invalid OTP";
-}
-}
+  if(otp == generatedOTP){
 
+    const phone = document.getElementById("phone").value;
+
+    try {
+      const response = await fetch("http://localhost:8080/api/user/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          phone: phone
+        })
+      });
+
+      const data = await response.json();
+
+      // 🔥 STORE BOTH
+      localStorage.setItem("userId", data.id);
+      localStorage.setItem("userPhone", data.phone);
+
+      // 🔥 REDIRECT
+      window.location.href = "dashboard.html";
+
+    } catch (error) {
+      console.error("Error:", error);
+    }
+
+  } else {
+    document.getElementById("msg").innerText = "Invalid OTP";
+  }
+}
 /* 🔥 ENTER KEY FUNCTIONALITY */
 
 // When pressing ENTER in phone input → send OTP

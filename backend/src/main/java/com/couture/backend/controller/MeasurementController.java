@@ -21,8 +21,8 @@ public class MeasurementController {
     }
 
     // Get measurement by userId
-    @GetMapping("/user/{userId}")
-public List<Measurement> getAll(@PathVariable Long userId) {
-    return repo.findByUserIdOrderByIdDesc(userId);
-}
+    @GetMapping("/{userId}")
+        public List<Measurement> getAll(@PathVariable Long userId) {
+        return repo.findByUserIdOrderByIdDesc(userId);
+    }
 }

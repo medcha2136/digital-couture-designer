@@ -1,7 +1,6 @@
-import { getMeasurements, saveMeasurement } from "../js/measurement-api.js";
-
 export async function getMeasurements(userId) {
-  const data = await getMeasurements(userId);
+  const response = await fetch(`http://localhost:8080/api/measurement/${userId}`);
+  return await response.json();
 }
 
 export async function saveMeasurement(data) {
