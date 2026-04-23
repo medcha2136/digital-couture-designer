@@ -634,7 +634,8 @@
   </div>
 
   <div class="modal-overlay" id="measurementModal">
-    <div class="modal" role="dialog" aria-label="Measurement Form">
+    <div class="modal" role="dialog" aria-label="Measurement Form"
+     style="max-height:80vh; overflow-y:auto;">
       <h3 style="margin:0 0 12px;color:var(--primary-dark);">Enter Measurements</h3>
 
       <div class="measure-options">
@@ -784,17 +785,32 @@ const garmentMeasurementMap = {
 }
 
     function renderDynamicMeasurementFields() {
-  currentMeasurementFields = garmentMeasurementMap[selectedProductName] || fullMeasurementFields;
+      currentMeasurementFields = garmentMeasurementMap[selectedProductName] || fullMeasurementFields;
       dynamicMeasurementFields.innerHTML = "";
 
       const current = selectedMeasurements || {};
+
       currentMeasurementFields.forEach((key) => {
+
+        const hasValue = current[key] !== undefined && current[key] !== "";
+
         dynamicMeasurementFields.innerHTML += `
           <div class="field">
             <label for="measure_${key}">${labelForField(key)}</label>
-            <input type="number" id="measure_${key}" min="1" value="${current[key] || ""}">
+            <input 
+              type="number" 
+              id="measure_${key}" 
+              min="1"
+              value="${hasValue ? current[key] : ""}"
+              placeholder="${hasValue ? "" : "Eg: 36"}"
+            >
           </div>
         `;
+      });
+
+      // UX boost: auto-select on focus
+      document.querySelectorAll("#dynamicMeasurementFields input").forEach(input => {
+        input.addEventListener("focus", () => input.select());
       });
     }
 
@@ -895,9 +911,17 @@ const garmentMeasurementMap = {
         div.style = "border:1px solid #ccc; padding:10px; margin:5px; cursor:pointer; border-radius:8px;";
 
         div.innerHTML = `
-          Chest: ${m.chestBust || '-'} | 
-          Waist: ${m.waistUpper || '-'} | 
-          Hip: ${m.hipUpper || '-'}
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span>
+        Chest: ${m.chestBust || '-'} | 
+        Waist: ${m.waistUpper || '-'} | 
+        Hip: ${m.hipUpper || '-'}
+        </span>
+        <button onclick="deleteMeasurement(${m.id})"
+            style="color:red; border:none; background:none; cursor:pointer;">
+        🗑
+        </button>
+        </div>
         `;
 
         div.onclick  = () => selectMeasurement(m);
@@ -955,6 +979,16 @@ const garmentMeasurementMap = {
       measurementStatus.innerText = "Saved: " + fields.map(k => `${labelForField(k).replace(" (inches)", "")} ${selectedMeasurements[k]}`).join(" | ");
       closeMeasurementModal();
       updateSummary();
+
+      const saveBtn = document.querySelector(".primary-btn");
+
+      saveBtn.style.boxShadow = "0 0 12px #2a9d8f";
+      saveBtn.style.transform = "scale(1.05)";
+
+      setTimeout(() => {
+      saveBtn.style.boxShadow = "";
+      saveBtn.style.transform = "";
+      }, 800);
     }
 
     function openOrdersPanel() {
@@ -1112,6 +1146,36 @@ fields.forEach(key => {
           setHeight();
         });
       });
+    }
+
+    function enableEnterNavigation() {
+      const inputs = document.querySelectorAll("#dynamicMeasurementFields input");
+
+      inputs.forEach((input, index) => {
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+
+            const next = inputs[index + 1];
+            if (next) {
+              next.focus();
+            } else {
+              document.querySelector(".primary-btn")?.focus();
+            }
+         }
+        });
+      });
+    }
+
+    function deleteMeasurement(id) {
+      fetch(`http://localhost:8080/api/measurement/${id}`, {
+        method: "DELETE"
+      })
+      .then(() => {
+        showToast("Deleted successfully", false);
+        importMeasurements();
+      })
+      .catch(() => showToast("Delete failed", true));
     }
 
     document.getElementById("openMeasurementBtn").addEventListener("click", openMeasurementModal);
