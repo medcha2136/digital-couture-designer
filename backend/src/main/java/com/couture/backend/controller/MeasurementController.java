@@ -22,7 +22,12 @@ public class MeasurementController {
 
     // Get measurement by userId
     @GetMapping("/{userId}")
-        public List<Measurement> getAll(@PathVariable Long userId) {
+    public List<Measurement> getAll(@PathVariable Long userId) {
         return repo.findByUserIdOrderByIdDesc(userId);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteMeasurement(@PathVariable Long id) {
+        repo.deleteById(id);
     }
 }
