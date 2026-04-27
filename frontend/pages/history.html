@@ -4,8 +4,42 @@
 <title>History</title>
 
 <style>
-body{font-family:Arial;background:#f4f7fa;padding:40px;}
-.card{background:white;padding:15px;margin:10px;border-radius:10px;}
+body {
+  font-family: Arial;
+  background: #f4f7fa;
+  padding: 40px;
+}
+
+/* ✅ Card styling */
+.card {
+  background: white;
+  padding: 15px;
+  margin: 12px 0;
+  border-radius: 10px;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+/* ✅ Image */
+.card img {
+  width: 80px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* ✅ Text block */
+.details {
+  font-size: 14px;
+}
+
+.details strong {
+  font-size: 16px;
+  display: block;
+  margin-bottom: 5px;
+}
 </style>
 </head>
 
@@ -17,13 +51,30 @@ body{font-family:Arial;background:#f4f7fa;padding:40px;}
 
 <script>
 
-let designs=JSON.parse(localStorage.getItem("designs"))||[];
+let list = document.getElementById("list");
+let designs = JSON.parse(localStorage.getItem("designs")) || [];
 
-designs.forEach(d=>{
-list.innerHTML+=`<div class="card">
-Fabric: ${d.fabric}<br>
-Color: ${d.color}
-</div>`;
+if (designs.length === 0) {
+  list.innerHTML = "<p>No designs yet.</p>";
+}
+
+designs.forEach(d => {
+
+  list.innerHTML += `
+    <div class="card">
+
+      <!-- ✅ IMAGE -->
+      <img src="${d.image || '../images/kurthi.jpeg'}">
+
+      <!-- ✅ DETAILS -->
+      <div class="details">
+        <strong>${d.template || "Design"}</strong>
+        Fabric: ${d.fabric || '-'}<br>
+        Color: ${d.color || '-'}
+      </div>
+
+    </div>
+  `;
 });
 
 </script>

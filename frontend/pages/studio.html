@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Customization Studio - Digital Couture</title>
+<title>Customization Studio - Digital Couture</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -552,7 +552,7 @@
 <body>
   <header class="topbar">
     <div class="topbar-inner">
-      <h1 class="title">AI Customization Studio</h1>
+      <h1 class="title">Customization Studio</h1>
       <div class="top-actions">
         <button class="btn" onclick="location.href='Dashboard.html'">Dashboard</button>
         <button class="btn" onclick="location.href='products.html'">Products</button>
@@ -717,6 +717,13 @@
     let measurementMode = "create";
     let currentMeasurementFields = [];
 
+    const categoryMap = {
+      "Ethnic Wear": ["lehenga", "sharara"],
+      "Casual Wear": ["kurti", "frock"],
+      "Party Wear": ["longdress", "maxidress"],
+      "Traditional": ["halfsaree", "pattuhalfsaree"]
+    };
+
     const productImage = document.getElementById("productImage");
     const productName = document.getElementById("productName");
     const productPrice = document.getElementById("productPrice");
@@ -801,7 +808,7 @@ const garmentMeasurementMap = {
               type="number" 
               id="measure_${key}" 
               min="1"
-              value="${hasValue ? current[key] : ""}"
+              value="${current[key] != null ? current[key] : ""}"
               placeholder="${hasValue ? "" : "Eg: 36"}"
             >
           </div>
@@ -812,6 +819,8 @@ const garmentMeasurementMap = {
       document.querySelectorAll("#dynamicMeasurementFields input").forEach(input => {
         input.addEventListener("focus", () => input.select());
       });
+
+      enableEnterNavigation();
     }
 
     function showToast(message, isError) {
@@ -876,6 +885,7 @@ const garmentMeasurementMap = {
     }
 
     function openMeasurementModal() {
+      //selectedMeasurements = {};
       measurementModal.classList.add("open");
       measurementMode = "create";
       measureHelpText.innerText = "Choose Import to load latest order measurement or Create New to enter values.";
@@ -884,11 +894,14 @@ const garmentMeasurementMap = {
 
     function closeMeasurementModal() {
       measurementModal.classList.remove("open");
+
+      // Optional: also update summary
+      //updateSummary();
     }
 
     function prepareCreateMeasurement() {
-    renderDynamicMeasurementFields();
-}
+      renderDynamicMeasurementFields();
+    }
 
   function importMeasurements() {
 
@@ -937,22 +950,24 @@ const garmentMeasurementMap = {
 
   // Convert backend → frontend format
   selectedMeasurements = {
-    chest_bust: m.chestBust,
-    waist_upper: m.waistUpper,
-    hip_upper: m.hipUpper,
-    shoulder_width: m.shoulderWidth,
-    sleeve_length: m.sleeveLength,
-    armhole: m.armhole,
-    neck: m.neck,
-    garment_length: m.garmentLength,
-    waist_pant: m.waistPant,
-    hip_lower: m.hipLower,
-    inseam_length: m.inseamLength,
-    outseam_length: m.outseamLength,
-    thigh: m.thigh
-  };
+  chest_bust: m.chestBust || "",
+  waist_upper: m.waistUpper || "",
+  hip_upper: m.hipUpper || "",
+  shoulder_width: m.shoulderWidth || "",
+  sleeve_length: m.sleeveLength || "",
+  armhole: m.armhole || "",
+  neck: m.neck || "",
+  garment_length: m.garmentLength || "",
+  waist_pant: m.waistPant || "",
+  hip_lower: m.hipLower || "",
+  inseam_length: m.inseamLength || "",
+  outseam_length: m.outseamLength || "",
+  thigh: m.thigh || ""
+};
 
   localStorage.setItem("tempMeasurements", JSON.stringify(selectedMeasurements));
+
+  measurementStatus.innerText = "Added ✔";
 
   showToast("Measurement selected", false);
 
@@ -976,11 +991,11 @@ const garmentMeasurementMap = {
 
       selectedMeasurements = payload;
       localStorage.setItem("tempMeasurements", JSON.stringify(selectedMeasurements));
-      measurementStatus.innerText = "Saved: " + fields.map(k => `${labelForField(k).replace(" (inches)", "")} ${selectedMeasurements[k]}`).join(" | ");
+      measurementStatus.innerText = "Added ✔";
       closeMeasurementModal();
       updateSummary();
 
-      const saveBtn = document.querySelector(".primary-btn");
+      const saveBtn = document.querySelector("#measurementModal .primary-btn");
 
       saveBtn.style.boxShadow = "0 0 12px #2a9d8f";
       saveBtn.style.transform = "scale(1.05)";
@@ -1003,36 +1018,54 @@ const garmentMeasurementMap = {
     function overlayClose(event) {
       if (event.target === ordersPanel) closeOrdersPanel();
     }
-
     function renderOrders() {
-      const phone = localStorage.getItem("userPhone");
-      const orders = JSON.parse(localStorage.getItem("orders") || "[]");
-      const userOrders = orders.filter(o => String(o.phone) === String(phone)).reverse();
+  const phone = localStorage.getItem("userPhone");
+
+  fetch(`http://localhost:8080/api/orders/${phone}`)
+    .then(res => res.json())
+    .then(data => {
+      const userOrders = data.reverse();
 
       ordersList.innerHTML = "";
+
       if (userOrders.length === 0) {
         ordersList.innerHTML = '<p style="margin:0;color:var(--muted);">No previous orders found for this number.</p>';
         return;
       }
 
       userOrders.forEach((order, index) => {
-        const m = order.measurements || {};
+
+        // ✅ FIX 1: parse measurements
+        const m = JSON.parse(order.measurements || "{}");
+
         const card = document.createElement("article");
         card.className = "order-item";
+
         card.innerHTML = `
           <div class="order-item-top">
-            <img src="${order.image || '../images/kurthi.jpeg'}" alt="${order.product || 'Order'}">
+            <img src="${order.image || '../images/kurthi.jpeg'}">
             <strong>${order.product || 'Order'}</strong>
           </div>
-          <div class="meta">Fabric: ${order.fabric || '-'}${order.color ? ` | Color: ${order.color}` : ''}</div>
-          <div class="meta">Chest: ${m.chestBust || '-'} | Waist: ${m.waistUpper || '-'} | Length: ${m.garmentLength || '-'}</div>
+          <div class="meta">
+            Fabric: ${order.fabric || '-'}${order.color ? ` | Color: ${order.color}` : ''}
+          </div>
+          <div class="meta">
+            Chest: ${m.chest_bust || '-'} | 
+            Waist: ${m.waist_upper || '-'} | 
+            Length: ${m.garment_length || '-'}
+          </div>
           <div class="meta">${order.time}</div>
         `;
+
         card.addEventListener("click", () => loadOrderToStudio(userOrders[index]));
+
         ordersList.appendChild(card);
       });
-    }
-
+    })
+    .catch(() => {
+      ordersList.innerHTML = '<p style="color:red;">Failed to load orders</p>';
+    });
+}
     function loadOrderToStudio(order) {
       if (!order) return;
 
@@ -1054,13 +1087,17 @@ fields.forEach(key => {
         selectedMeasurements = filtered;
         localStorage.setItem("tempMeasurements", JSON.stringify(selectedMeasurements));
       }
+        updateLeftProduct();
+        renderProductSwitch();
+        renderFabrics();
 
-      updateLeftProduct();
-      renderProductSwitch();
-      renderFabrics();
-      updateSummary();
-      closeOrdersPanel();
-      showToast("Previous order loaded.", false);
+        // 🔥 restore measurements UI after refresh
+        if (selectedMeasurements) {
+          measurementStatus.innerText = "Added ✔";
+        }
+
+        updateSummary();
+        initAccordion();
     }
 
     function updateSummary() {
@@ -1075,22 +1112,30 @@ fields.forEach(key => {
       document.getElementById("fixedSummary").innerText = `Fabric: ${selectedFabric || '--'} | Measurements: ${hasMeasurements ? measurementText : '--'}`;
 
       if (hasMeasurements) {
-        measurementStatus.innerText = `Saved: ${measurementText}`;
+        measurementStatus.innerText = "Added ✔";
       }
     }
 
     function placeOrder() {
+      localStorage.setItem("selectedMeasurement", JSON.stringify(selectedMeasurements));
       if (!selectedFabric) {
         showToast("Please select fabric before placing order.", true);
         return;
       }
 
-      const required = garmentMeasurementMap[selectedProductName] || fullMeasurementFields;
-      const hasRequiredMeasurements = selectedMeasurements && required.every(k => selectedMeasurements[k]);
-      if (!hasRequiredMeasurements) {
-        showToast("Please add measurements before placing order.", true);
-        return;
-      }
+      const fields = garmentMeasurementMap[selectedProductName] || [];
+
+const hasRequiredMeasurements =
+  selectedMeasurements &&
+  fields.some(k => {
+    const v = selectedMeasurements[k];
+    return v !== null && v !== "" && v !== undefined;
+  });
+
+if (!hasRequiredMeasurements) {
+  showToast("Please add measurements before placing order.", true);
+  return;
+}
 
       const phone = localStorage.getItem("userPhone");
       const product = products[selectedProductName];
@@ -1107,9 +1152,27 @@ fields.forEach(key => {
         time: new Date().toLocaleString()
       };
 
-      const orders = JSON.parse(localStorage.getItem("orders") || "[]");
-      orders.push(order);
-      localStorage.setItem("orders", JSON.stringify(orders));
+      fetch("http://localhost:8080/api/orders", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        phone,
+        product: order.product,
+        image: order.image,
+        fabric: order.fabric,
+        color: order.color,
+        measurements: JSON.stringify(order.measurements),
+        time: order.time
+      })
+    })
+    .then(() => {
+     showToast("Order placed successfully 🎉", false);
+    })
+    .catch(() => {
+    showToast("Order failed", true);
+    });
 
       const design = {
         template: order.product,
@@ -1125,7 +1188,7 @@ fields.forEach(key => {
       localStorage.setItem("designs", JSON.stringify(designs));
       localStorage.setItem("lastViewed", JSON.stringify(design));
 
-      showToast("Order placed successfully.", false);
+      showToast("Order placed successfully 🎉", false);
       renderOrders();
     }
 
