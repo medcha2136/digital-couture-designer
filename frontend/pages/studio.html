@@ -1,554 +1,575 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Customization Studio - Digital Couture</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --primary: #2a9d8f;
-    --primary-dark: #217e72;
-    --bg: #f4f7fa;
-    --card: #ffffff;
-    --ink: #1f2b31;
-    --muted: #61707a;
-    --line: #dde7ec;
-    --radius: 14px;
-  }
-
-  * { box-sizing: border-box; }
-
-  body {
-    margin: 0;
-    font-family: "Poppins", "Segoe UI", sans-serif;
-    color: var(--ink);
-    background:
-      radial-gradient(circle at 8% 8%, #ddf3ef 0%, transparent 28%),
-      radial-gradient(circle at 88% 92%, #dde8fb 0%, transparent 30%),
-      var(--bg);
-    padding-bottom: 96px;
-  }
-
-  .topbar {
-    position: sticky;
-    top: 0;
-    z-index: 20;
-    background: rgba(244, 247, 250, 0.95);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--line);
-  }
-
-  .topbar-inner {
-    width: min(1200px, 94vw);
-    margin: 0 auto;
-    min-height: 72px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .title {
-    font-size: clamp(1.1rem, 2.3vw, 1.45rem);
-    color: var(--primary-dark);
-    margin: 0;
-  }
-
-  .top-actions {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-
-  .btn {
-    border: 1px solid var(--line);
-    background: #fff;
-    color: var(--ink);
-    border-radius: 999px;
-    padding: 8px 13px;
-    font: inherit;
-    font-weight: 500;
-    cursor: pointer;
-    transition: .2s ease;
-  }
-
-  .btn:hover { transform: translateY(-1px); }
-
-  .container {
-    width: min(1200px, 94vw);
-    margin: 20px auto 26px;
-    display: grid;
-    grid-template-columns: 1fr 1.15fr;
-    gap: 18px;
-  }
-
-  .card {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    box-shadow: 0 10px 26px rgba(31, 43, 49, 0.08);
-  }
-
-  .left {
-    padding: 16px;
-    position: sticky;
-    top: 90px;
-    height: fit-content;
-  }
-
-  .img-wrap {
-    border-radius: 12px;
-    overflow: hidden;
-    background: #edf3f5;
-    border: 1px solid var(--line);
-  }
-
-  .img-wrap img {
-    width: 100%;
-    height: clamp(250px, 42vw, 430px);
-    object-fit: cover;
-    display: block;
-  }
-
-  .product-meta {
-    margin-top: 12px;
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-
-  .product-name {
-    margin: 0;
-    font-size: 1.05rem;
-  }
-
-  .price {
-    color: var(--primary-dark);
-    font-weight: 700;
-  }
-
-  .product-switch {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-    gap: 8px;
-    margin-top: 14px;
-  }
-
-  .switch-item {
-    border: 1px solid var(--line);
-    background: #fff;
-    border-radius: 10px;
-    padding: 9px;
-    text-align: center;
-    cursor: pointer;
-    font-size: 0.88rem;
-    transition: .2s ease;
-  }
-
-  .switch-item:hover,
-  .switch-item.active {
-    border-color: var(--primary);
-    background: #ebf8f6;
-    color: var(--primary-dark);
-  }
-
-  .summary {
-    margin-top: 14px;
-    border: 1px solid #cde7e2;
-    background: #f2fbf9;
-    border-radius: 12px;
-    padding: 12px;
-  }
-
-  .summary h3 {
-    margin: 0 0 8px;
-    font-size: 0.96rem;
-    color: var(--primary-dark);
-  }
-
-  .summary-line {
-    font-size: 0.9rem;
-    color: var(--muted);
-    line-height: 1.6;
-  }
-
-  .right {
-    padding: 14px;
-    display: grid;
-    gap: 12px;
-    align-content: start;
-  }
-
-  .accordion {
-    overflow: hidden;
-  }
-
-  .acc-head {
-    width: 100%;
-    border: 0;
-    background: #fff;
-    text-align: left;
-    padding: 14px;
-    font: inherit;
-    font-weight: 600;
-    color: var(--ink);
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .acc-head .icon {
-    margin-right: 8px;
-  }
-
-  .acc-head .left-label {
-    display: inline-flex;
-    align-items: center;
-  }
-
-  .acc-head .chev {
-    transition: transform .25s ease;
-    color: var(--muted);
-  }
-
-  .accordion.open .chev { transform: rotate(180deg); }
-
-  .acc-body {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height .28s ease;
-    border-top: 1px solid transparent;
-  }
-
-  .accordion.open .acc-body {
-    border-top-color: var(--line);
-  }
-
-  .acc-inner { padding: 14px; }
-
-  .fabric-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-    gap: 9px;
-  }
-
-  .fabric-card {
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    background: #fff;
-    padding: 10px;
-    cursor: pointer;
-    transition: .2s ease;
-    position: relative;
-  }
-
-  .fabric-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(42, 157, 143, 0.15);
-  }
-
-  .fabric-card.active {
-    border-color: var(--primary);
-    background: #eefaf8;
-  }
-
-  .badge {
-    display: inline-block;
-    margin-top: 4px;
-    font-size: 0.72rem;
-    color: #0f665e;
-    background: #dbf5f0;
-    border-radius: 999px;
-    padding: 2px 7px;
-  }
-
-  .ai-note {
-    margin: 0 0 10px;
-    background: #eef8ff;
-    border: 1px solid #cde3ff;
-    color: #2a5078;
-    border-radius: 9px;
-    padding: 9px;
-    font-size: 0.88rem;
-  }
-
-  .color-row {
-    display: grid;
-    grid-template-columns: 68px 1fr;
-    gap: 10px;
-    align-items: center;
-  }
-
-  .color-presets {
-    margin-top: 10px;
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-
-  .color-dot {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    border: 2px solid #fff;
-    box-shadow: 0 0 0 1px #cedbe1;
-    cursor: pointer;
-    transition: transform .2s ease;
-  }
-
-  .color-dot:hover,
-  .color-dot.active {
-    transform: scale(1.14);
-    box-shadow: 0 0 0 2px var(--primary);
-  }
-
-  .measurement-pill {
-    display: inline-flex;
-    gap: 8px;
-    align-items: center;
-    border: 1px solid #cbe9e3;
-    background: #edf9f6;
-    color: #1c7469;
-    border-radius: 999px;
-    padding: 6px 10px;
-    font-size: 0.85rem;
-    margin-top: 8px;
-  }
-
-  .primary-btn {
-    border: 0;
-    border-radius: 10px;
-    background: linear-gradient(90deg, var(--primary), var(--primary-dark));
-    color: #fff;
-    padding: 11px 14px;
-    font: inherit;
-    font-weight: 600;
-    cursor: pointer;
-  }
-
-  .primary-btn:hover { filter: brightness(1.06); }
-
-  .orders-panel,
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-  }
-
-  .orders-panel {
-    z-index: 40;
-    display: flex;
-    justify-content: flex-end;
-  }
-
-  .orders-sheet {
-    width: min(400px, 94vw);
-    height: 100%;
-    background: #fff;
-    border-left: 1px solid var(--line);
-    box-shadow: -18px 0 40px rgba(31, 43, 49, 0.2);
-    transform: translateX(100%);
-    transition: transform .28s ease;
-    display: grid;
-    grid-template-rows: auto 1fr;
-  }
-
-  .orders-panel.open {
-    pointer-events: auto;
-    background: rgba(21, 35, 45, 0.35);
-  }
-
-  .orders-panel.open .orders-sheet {
-    transform: translateX(0);
-  }
-
-  .orders-head {
-    padding: 14px;
-    border-bottom: 1px solid var(--line);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .orders-list {
-    padding: 14px;
-    overflow: auto;
-    display: grid;
-    gap: 10px;
-    align-content: start;
-  }
-
-  .order-item {
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    padding: 10px;
-    background: #fff;
-    cursor: pointer;
-    transition: transform .2s ease, box-shadow .2s ease;
-  }
-
-  .order-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(31, 43, 49, 0.12);
-  }
-
-  .order-item-top {
-    display: grid;
-    grid-template-columns: 56px 1fr;
-    gap: 8px;
-    align-items: center;
-  }
-
-  .order-item-top img {
-    width: 56px;
-    height: 56px;
-    border-radius: 8px;
-    object-fit: cover;
-    border: 1px solid var(--line);
-  }
-
-  .order-item .meta {
-    font-size: 0.84rem;
-    color: var(--muted);
-    margin-top: 5px;
-  }
-
-  .modal-overlay {
-    z-index: 50;
-    background: rgba(16, 35, 42, 0.5);
-    display: grid;
-    place-items: center;
-    opacity: 0;
-    transition: opacity .24s ease;
-  }
-
-  .modal-overlay.open {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  .modal {
-    width: min(430px, 92vw);
-    background: #fff;
-    border-radius: 14px;
-    border: 1px solid var(--line);
-    box-shadow: 0 18px 45px rgba(31, 43, 49, 0.2);
-    padding: 16px;
-    transform: translateY(10px) scale(0.98);
-    transition: .22s ease;
-  }
-
-  .modal-overlay.open .modal {
-    transform: translateY(0) scale(1);
-  }
-
-  .field { margin-bottom: 10px; }
-
-  .field label {
-    display: block;
-    margin-bottom: 5px;
-    font-size: 0.9rem;
-    color: var(--muted);
-  }
-
-  .field input {
-    width: 100%;
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    padding: 10px;
-    font: inherit;
-  }
-
-  .measure-options {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin-bottom: 10px;
-  }
-
-  .measure-options .btn {
-    border-radius: 10px;
-    padding: 9px 10px;
-  }
-
-  .dynamic-fields {
-    display: grid;
-    gap: 10px;
-  }
-
-  .fixed-order {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 30;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(8px);
-    border-top: 1px solid var(--line);
-    padding: 10px 12px;
-  }
-
-  .fixed-order-inner {
-    width: min(1200px, 94vw);
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-  }
-
-  .fixed-meta {
-    color: var(--muted);
-    font-size: 0.9rem;
-  }
-
-  .fixed-order .primary-btn {
-    min-width: 180px;
-    font-size: 1rem;
-    padding: 12px 16px;
-  }
-
-  .toast {
-    position: fixed;
-    top: 86px;
-    right: 16px;
-    background: #0f675e;
-    color: #fff;
-    padding: 10px 13px;
-    border-radius: 10px;
-    z-index: 80;
-    opacity: 0;
-    transform: translateY(-8px);
-    transition: .2s ease;
-    pointer-events: none;
-  }
-
-  .toast.show {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  @media (max-width: 980px) {
-    .container { grid-template-columns: 1fr; }
-    .left { position: static; }
-  }
-
-  @media (max-width: 580px) {
-    .fixed-order-inner {
-      flex-direction: column;
-      align-items: stretch;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customization Studio - Digital Couture</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2a9d8f;
+      --primary-dark: #217e72;
+      --bg: #f4f7fa;
+      --card: #ffffff;
+      --ink: #1f2b31;
+      --muted: #61707a;
+      --line: #dde7ec;
+      --radius: 14px;
     }
 
-    .fixed-order .primary-btn { width: 100%; }
-  }
-</style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Poppins", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 8% 8%, #ddf3ef 0%, transparent 28%),
+        radial-gradient(circle at 88% 92%, #dde8fb 0%, transparent 30%),
+        var(--bg);
+      padding-bottom: 96px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(244, 247, 250, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar-inner {
+      width: min(1200px, 94vw);
+      margin: 0 auto;
+      min-height: 72px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .title {
+      font-size: clamp(1.1rem, 2.3vw, 1.45rem);
+      color: var(--primary-dark);
+      margin: 0;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      border-radius: 999px;
+      padding: 8px 13px;
+      font: inherit;
+      font-weight: 500;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .container {
+      width: min(1200px, 94vw);
+      margin: 20px auto 26px;
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      gap: 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 26px rgba(31, 43, 49, 0.08);
+    }
+
+    .left {
+      padding: 16px;
+      position: sticky;
+      top: 90px;
+      height: fit-content;
+    }
+
+    .img-wrap {
+      border-radius: 12px;
+      overflow: hidden;
+      background: #edf3f5;
+      border: 1px solid var(--line);
+    }
+
+    .img-wrap img {
+      width: 100%;
+      height: clamp(250px, 42vw, 430px);
+      object-fit: cover;
+      display: block;
+    }
+
+    .product-meta {
+      margin-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .product-name {
+      margin: 0;
+      font-size: 1.05rem;
+    }
+
+    .price {
+      color: var(--primary-dark);
+      font-weight: 700;
+    }
+
+    .product-switch {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .switch-item {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 10px;
+      padding: 9px;
+      text-align: center;
+      cursor: pointer;
+      font-size: 0.88rem;
+      transition: .2s ease;
+    }
+
+    .switch-item:hover,
+    .switch-item.active {
+      border-color: var(--primary);
+      background: #ebf8f6;
+      color: var(--primary-dark);
+    }
+
+    .summary {
+      margin-top: 14px;
+      border: 1px solid #cde7e2;
+      background: #f2fbf9;
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .summary h3 {
+      margin: 0 0 8px;
+      font-size: 0.96rem;
+      color: var(--primary-dark);
+    }
+
+    .summary-line {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .right {
+      padding: 14px;
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+
+    .accordion {
+      overflow: hidden;
+    }
+
+    .acc-head {
+      width: 100%;
+      border: 0;
+      background: #fff;
+      text-align: left;
+      padding: 14px;
+      font: inherit;
+      font-weight: 600;
+      color: var(--ink);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .acc-head .icon {
+      margin-right: 8px;
+    }
+
+    .acc-head .left-label {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .acc-head .chev {
+      transition: transform .25s ease;
+      color: var(--muted);
+    }
+
+    .accordion.open .chev {
+      transform: rotate(180deg);
+    }
+
+    .acc-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .28s ease;
+      border-top: 1px solid transparent;
+    }
+
+    .accordion.open .acc-body {
+      border-top-color: var(--line);
+    }
+
+    .acc-inner {
+      padding: 14px;
+    }
+
+    .fabric-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 9px;
+    }
+
+    .fabric-card {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fff;
+      padding: 10px;
+      cursor: pointer;
+      transition: .2s ease;
+      position: relative;
+    }
+
+    .fabric-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(42, 157, 143, 0.15);
+    }
+
+    .fabric-card.active {
+      border-color: var(--primary);
+      background: #eefaf8;
+    }
+
+    .badge {
+      display: inline-block;
+      margin-top: 4px;
+      font-size: 0.72rem;
+      color: #0f665e;
+      background: #dbf5f0;
+      border-radius: 999px;
+      padding: 2px 7px;
+    }
+
+    .ai-note {
+      margin: 0 0 10px;
+      background: #eef8ff;
+      border: 1px solid #cde3ff;
+      color: #2a5078;
+      border-radius: 9px;
+      padding: 9px;
+      font-size: 0.88rem;
+    }
+
+    .color-row {
+      display: grid;
+      grid-template-columns: 68px 1fr;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .color-presets {
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .color-dot {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      box-shadow: 0 0 0 1px #cedbe1;
+      cursor: pointer;
+      transition: transform .2s ease;
+    }
+
+    .color-dot:hover,
+    .color-dot.active {
+      transform: scale(1.14);
+      box-shadow: 0 0 0 2px var(--primary);
+    }
+
+    .measurement-pill {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      border: 1px solid #cbe9e3;
+      background: #edf9f6;
+      color: #1c7469;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+
+    .primary-btn {
+      border: 0;
+      border-radius: 10px;
+      background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+      color: #fff;
+      padding: 11px 14px;
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .primary-btn:hover {
+      filter: brightness(1.06);
+    }
+
+    .orders-panel,
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .orders-panel {
+      z-index: 40;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .orders-sheet {
+      width: min(400px, 94vw);
+      height: 100%;
+      background: #fff;
+      border-left: 1px solid var(--line);
+      box-shadow: -18px 0 40px rgba(31, 43, 49, 0.2);
+      transform: translateX(100%);
+      transition: transform .28s ease;
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    .orders-panel.open {
+      pointer-events: auto;
+      background: rgba(21, 35, 45, 0.35);
+    }
+
+    .orders-panel.open .orders-sheet {
+      transform: translateX(0);
+    }
+
+    .orders-head {
+      padding: 14px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .orders-list {
+      padding: 14px;
+      overflow: auto;
+      display: grid;
+      gap: 10px;
+      align-content: start;
+    }
+
+    .order-item {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px;
+      background: #fff;
+      cursor: pointer;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .order-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(31, 43, 49, 0.12);
+    }
+
+    .order-item-top {
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .order-item-top img {
+      width: 56px;
+      height: 56px;
+      border-radius: 8px;
+      object-fit: cover;
+      border: 1px solid var(--line);
+    }
+
+    .order-item .meta {
+      font-size: 0.84rem;
+      color: var(--muted);
+      margin-top: 5px;
+    }
+
+    .modal-overlay {
+      z-index: 50;
+      background: rgba(16, 35, 42, 0.5);
+      display: grid;
+      place-items: center;
+      opacity: 0;
+      transition: opacity .24s ease;
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal {
+      width: min(430px, 92vw);
+      background: #fff;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 45px rgba(31, 43, 49, 0.2);
+      padding: 16px;
+      transform: translateY(10px) scale(0.98);
+      transition: .22s ease;
+    }
+
+    .modal-overlay.open .modal {
+      transform: translateY(0) scale(1);
+    }
+
+    .field {
+      margin-bottom: 10px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .field input {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px;
+      font: inherit;
+    }
+
+    .measure-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .measure-options .btn {
+      border-radius: 10px;
+      padding: 9px 10px;
+    }
+
+    .dynamic-fields {
+      display: grid;
+      gap: 10px;
+    }
+
+    .fixed-order {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 30;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border-top: 1px solid var(--line);
+      padding: 10px 12px;
+    }
+
+    .fixed-order-inner {
+      width: min(1200px, 94vw);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .fixed-meta {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .fixed-order .primary-btn {
+      min-width: 180px;
+      font-size: 1rem;
+      padding: 12px 16px;
+    }
+
+    .toast {
+      position: fixed;
+      top: 86px;
+      right: 16px;
+      background: #0f675e;
+      color: #fff;
+      padding: 10px 13px;
+      border-radius: 10px;
+      z-index: 80;
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: .2s ease;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 980px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+
+      .left {
+        position: static;
+      }
+    }
+
+    @media (max-width: 580px) {
+      .fixed-order-inner {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .fixed-order .primary-btn {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
+
 <body>
   <header class="topbar">
     <div class="topbar-inner">
@@ -615,7 +636,8 @@
         </button>
         <div class="acc-body">
           <div class="acc-inner">
-            <p style="margin:0;color:var(--muted);font-size:.92rem;">View your previous customizations in a sliding panel.</p>
+            <p style="margin:0;color:var(--muted);font-size:.92rem;">View your previous customizations in a sliding
+              panel.</p>
             <button class="btn" style="margin-top:10px;" type="button" onclick="openOrdersPanel()">Open Orders</button>
           </div>
         </div>
@@ -634,8 +656,7 @@
   </div>
 
   <div class="modal-overlay" id="measurementModal">
-    <div class="modal" role="dialog" aria-label="Measurement Form"
-     style="max-height:80vh; overflow-y:auto;">
+    <div class="modal" role="dialog" aria-label="Measurement Form" style="max-height:80vh; overflow-y:auto;">
       <h3 style="margin:0 0 12px;color:var(--primary-dark);">Enter Measurements</h3>
 
       <div class="measure-options">
@@ -671,11 +692,25 @@
       window.location.href = "login.html";
     }
 
+    const categoryProducts = {
+      ethnic: ["lehanga", "sharara", "simplehalfsaree", "toplehanga"],
+      casual: ["kurti", "casualdress"],
+      party: ["shimmercholi", "longdress", "maxidress"],
+      traditional: ["halfsaree", "patthuhalfsaree"]
+    };
+
     const products = {
-      Kurti: { name: "Kurti", price: 999, img: "../images/kurthi.jpeg" },
-      Lehenga: { name: "Lehenga", price: 2999, img: "../images/lehanga.jpeg" },
-      Sharara: { name: "Sharara", price: 2499, img: "../images/sharara.jpeg" },
-      "Half Saree": { name: "Half Saree", price: 2199, img: "../images/halfsaree.jpeg" }
+      kurti: { name: "Kurti", img: "../images/kurthi.jpeg", price: 999 },
+      lehanga: { name: "Lehenga", img: "../images/lehanga.jpeg", price: 1999 },
+      sharara: { name: "Sharara", img: "../images/sharara.jpeg", price: 1499 },
+      halfsaree: { name: "Half Saree", img: "../images/halfsaree.jpeg", price: 2499 },
+      simplehalfsaree: { name: "Simple Half Saree", img: "../images/simplehalfsaree.png", price: 1999 },
+      shimmercholi: { name: "Shimmer Choli", img: "../images/shimmercholi.webp", price: 2999 },
+      toplehanga: { name: "Top Lehenga", img: "../images/toplehanga.webp", price: 2799 },
+      longdress: { name: "Long Dress", img: "../images/longdress.jpeg", price: 1599 },
+      maxidress: { name: "Maxi Dress", img: "../images/maxidress.jpeg", price: 1399 },
+      casualdress: { name: "Casual Dress", img: "../images/casualdress.jpeg", price: 999 },
+      patthuhalfsaree: { name: "Pattu Half Saree", img: "../images/patthuhalfsaree.jpeg", price: 3499 }
     };
 
     const fabricMap = {
@@ -708,8 +743,16 @@
     const previousDesign = JSON.parse(localStorage.getItem("design") || "null");
     //const storedProduct = JSON.parse(localStorage.getItem("selectedProduct") || "null");
 
-    let selectedProductName = storedProduct?.name || previousDesign?.template || "Kurti";
-    if (!products[selectedProductName]) selectedProductName = "Kurti";
+    const category = localStorage.getItem("selectedCategory") || "casual";
+    const filteredProducts = categoryProducts[category] || Object.keys(products);
+
+    let selectedProductName =
+      storedProduct?.name ||
+      previousDesign?.template ||
+      filteredProducts[0];
+    if (!products[selectedProductName]) {
+      selectedProductName = filteredProducts[0];
+    }
 
     let selectedFabric = "";
     let selectedColor = "#2a9d8f";
@@ -739,57 +782,57 @@
     const toast = document.getElementById("toast");
 
     const fullMeasurementFields = [
-  "chest_bust",
-  "waist_upper",
-  "hip_upper",
-  "shoulder_width",
-  "sleeve_length",
-  "armhole",
-  "neck",
-  "garment_length",
-  "waist_pant",
-  "hip_lower",
-  "inseam_length",
-  "outseam_length",
-  "thigh"
-];
+      "chest_bust",
+      "waist_upper",
+      "hip_upper",
+      "shoulder_width",
+      "sleeve_length",
+      "armhole",
+      "neck",
+      "garment_length",
+      "waist_pant",
+      "hip_lower",
+      "inseam_length",
+      "outseam_length",
+      "thigh"
+    ];
 
-const garmentMeasurementMap = {
-  Kurti: [
-    "chest_bust",
-    "waist_upper",
-    "hip_upper",
-    "shoulder_width",
-    "sleeve_length",
-    "armhole",
-    "neck",
-    "garment_length"
-  ],
+    const garmentMeasurementMap = {
+      Kurti: [
+        "chest_bust",
+        "waist_upper",
+        "hip_upper",
+        "shoulder_width",
+        "sleeve_length",
+        "armhole",
+        "neck",
+        "garment_length"
+      ],
 
-  Lehenga: [
-    "waist_pant",
-    "hip_lower",
-    "garment_length"
-  ],
+      Lehenga: [
+        "waist_pant",
+        "hip_lower",
+        "garment_length"
+      ],
 
-  Sharara: [
-    "waist_pant",
-    "hip_lower",
-    "inseam_length",
-    "outseam_length",
-    "thigh"
-  ],
+      Sharara: [
+        "waist_pant",
+        "hip_lower",
+        "inseam_length",
+        "outseam_length",
+        "thigh"
+      ],
 
-  "Half Saree": [
-    "chest_bust",
-    "waist_upper",
-    "hip_upper",
-    "garment_length"
-  ]
-};
+      "Half Saree": [
+        "chest_bust",
+        "waist_upper",
+        "hip_upper",
+        "garment_length"
+      ]
+    };
     function labelForField(fieldKey) {
-  return fieldKey.replaceAll("_", " ").toUpperCase();
-}
+      return fieldKey.replaceAll("_", " ").toUpperCase();
+    }
 
     function renderDynamicMeasurementFields() {
       currentMeasurementFields = garmentMeasurementMap[selectedProductName] || fullMeasurementFields;
@@ -839,7 +882,10 @@ const garmentMeasurementMap = {
 
     function renderProductSwitch() {
       productSwitch.innerHTML = "";
-      Object.keys(products).forEach(name => {
+      const category = localStorage.getItem("selectedCategory") || "casual";
+      const filteredProducts = categoryProducts[category] || Object.keys(products);
+
+      filteredProducts.forEach(name => {
         const btn = document.createElement("button");
         btn.type = "button";
         btn.className = "switch-item" + (name === selectedProductName ? " active" : "");
@@ -903,27 +949,27 @@ const garmentMeasurementMap = {
       renderDynamicMeasurementFields();
     }
 
-  function importMeasurements() {
+    function importMeasurements() {
 
-    const userId = localStorage.getItem("userId");
+      const userId = localStorage.getItem("userId");
 
-    fetch(`http://localhost:8080/api/measurement/${userId}`)
-    .then(res => res.json())
-    .then(data => {
+      fetch(`http://localhost:8080/api/measurement/${userId}`)
+        .then(res => res.json())
+        .then(data => {
 
-      if (!data || data.length === 0) {
-        showToast("No saved measurements found", true);
-        return;
-      }
+          if (!data || data.length === 0) {
+            showToast("No saved measurements found", true);
+            return;
+          }
 
-      dynamicMeasurementFields.innerHTML = "<h4>Select Measurement</h4>";
+          dynamicMeasurementFields.innerHTML = "<h4>Select Measurement</h4>";
 
-      data.forEach(m => {
-        const div = document.createElement("div");
+          data.forEach(m => {
+            const div = document.createElement("div");
 
-        div.style = "border:1px solid #ccc; padding:10px; margin:5px; cursor:pointer; border-radius:8px;";
+            div.style = "border:1px solid #ccc; padding:10px; margin:5px; cursor:pointer; border-radius:8px;";
 
-        div.innerHTML = `
+            div.innerHTML = `
         <div style="display:flex; justify-content:space-between; align-items:center;">
         <span>
         Chest: ${m.chestBust || '-'} | 
@@ -937,43 +983,43 @@ const garmentMeasurementMap = {
         </div>
         `;
 
-        div.onclick  = () => selectMeasurement(m);
+            div.onclick = () => selectMeasurement(m);
 
-        dynamicMeasurementFields.appendChild(div);
-      });
+            dynamicMeasurementFields.appendChild(div);
+          });
 
-    })
-    .catch(() => showToast("Error loading measurements", true));
-  }
+        })
+        .catch(() => showToast("Error loading measurements", true));
+    }
 
-  function selectMeasurement(m) {
+    function selectMeasurement(m) {
 
-  // Convert backend → frontend format
-  selectedMeasurements = {
-  chest_bust: m.chestBust || "",
-  waist_upper: m.waistUpper || "",
-  hip_upper: m.hipUpper || "",
-  shoulder_width: m.shoulderWidth || "",
-  sleeve_length: m.sleeveLength || "",
-  armhole: m.armhole || "",
-  neck: m.neck || "",
-  garment_length: m.garmentLength || "",
-  waist_pant: m.waistPant || "",
-  hip_lower: m.hipLower || "",
-  inseam_length: m.inseamLength || "",
-  outseam_length: m.outseamLength || "",
-  thigh: m.thigh || ""
-};
+      // Convert backend → frontend format
+      selectedMeasurements = {
+        chest_bust: m.chestBust || "",
+        waist_upper: m.waistUpper || "",
+        hip_upper: m.hipUpper || "",
+        shoulder_width: m.shoulderWidth || "",
+        sleeve_length: m.sleeveLength || "",
+        armhole: m.armhole || "",
+        neck: m.neck || "",
+        garment_length: m.garmentLength || "",
+        waist_pant: m.waistPant || "",
+        hip_lower: m.hipLower || "",
+        inseam_length: m.inseamLength || "",
+        outseam_length: m.outseamLength || "",
+        thigh: m.thigh || ""
+      };
 
-  localStorage.setItem("tempMeasurements", JSON.stringify(selectedMeasurements));
+      localStorage.setItem("tempMeasurements", JSON.stringify(selectedMeasurements));
 
-  measurementStatus.innerText = "Added ✔";
+      measurementStatus.innerText = "Added ✔";
 
-  showToast("Measurement selected", false);
+      showToast("Measurement selected", false);
 
-  closeMeasurementModal();
-  updateSummary();
-}
+      closeMeasurementModal();
+      updateSummary();
+    }
 
     function saveMeasurements() {
       const payload = {};
@@ -1001,8 +1047,8 @@ const garmentMeasurementMap = {
       saveBtn.style.transform = "scale(1.05)";
 
       setTimeout(() => {
-      saveBtn.style.boxShadow = "";
-      saveBtn.style.transform = "";
+        saveBtn.style.boxShadow = "";
+        saveBtn.style.transform = "";
       }, 800);
     }
 
@@ -1019,29 +1065,29 @@ const garmentMeasurementMap = {
       if (event.target === ordersPanel) closeOrdersPanel();
     }
     function renderOrders() {
-  const phone = localStorage.getItem("userPhone");
+      const phone = localStorage.getItem("userPhone");
 
-  fetch(`http://localhost:8080/api/orders/${phone}`)
-    .then(res => res.json())
-    .then(data => {
-      const userOrders = data.reverse();
+      fetch(`http://localhost:8080/api/orders/${phone}`)
+        .then(res => res.json())
+        .then(data => {
+          const userOrders = data.reverse();
 
-      ordersList.innerHTML = "";
+          ordersList.innerHTML = "";
 
-      if (userOrders.length === 0) {
-        ordersList.innerHTML = '<p style="margin:0;color:var(--muted);">No previous orders found for this number.</p>';
-        return;
-      }
+          if (userOrders.length === 0) {
+            ordersList.innerHTML = '<p style="margin:0;color:var(--muted);">No previous orders found for this number.</p>';
+            return;
+          }
 
-      userOrders.forEach((order, index) => {
+          userOrders.forEach((order, index) => {
 
-        // ✅ FIX 1: parse measurements
-        const m = JSON.parse(order.measurements || "{}");
+            // ✅ FIX 1: parse measurements
+            const m = JSON.parse(order.measurements || "{}");
 
-        const card = document.createElement("article");
-        card.className = "order-item";
+            const card = document.createElement("article");
+            card.className = "order-item";
 
-        card.innerHTML = `
+            card.innerHTML = `
           <div class="order-item-top">
             <img src="${order.image || '../images/kurthi.jpeg'}">
             <strong>${order.product || 'Order'}</strong>
@@ -1057,15 +1103,15 @@ const garmentMeasurementMap = {
           <div class="meta">${order.time}</div>
         `;
 
-        card.addEventListener("click", () => loadOrderToStudio(userOrders[index]));
+            card.addEventListener("click", () => loadOrderToStudio(userOrders[index]));
 
-        ordersList.appendChild(card);
-      });
-    })
-    .catch(() => {
-      ordersList.innerHTML = '<p style="color:red;">Failed to load orders</p>';
-    });
-}
+            ordersList.appendChild(card);
+          });
+        })
+        .catch(() => {
+          ordersList.innerHTML = '<p style="color:red;">Failed to load orders</p>';
+        });
+    }
     function loadOrderToStudio(order) {
       if (!order) return;
 
@@ -1081,23 +1127,23 @@ const garmentMeasurementMap = {
         const filtered = {};
         const fields = garmentMeasurementMap[selectedProductName] || fullMeasurementFields;
 
-fields.forEach(key => {
+        fields.forEach(key => {
           filtered[key] = order.measurements[key] || "";
         });
         selectedMeasurements = filtered;
         localStorage.setItem("tempMeasurements", JSON.stringify(selectedMeasurements));
       }
-        updateLeftProduct();
-        renderProductSwitch();
-        renderFabrics();
+      updateLeftProduct();
+      renderProductSwitch();
+      renderFabrics();
 
-        // 🔥 restore measurements UI after refresh
-        if (selectedMeasurements) {
-          measurementStatus.innerText = "Added ✔";
-        }
+      // 🔥 restore measurements UI after refresh
+      if (selectedMeasurements) {
+        measurementStatus.innerText = "Added ✔";
+      }
 
-        updateSummary();
-        initAccordion();
+      updateSummary();
+      initAccordion();
     }
 
     function updateSummary() {
@@ -1125,17 +1171,17 @@ fields.forEach(key => {
 
       const fields = garmentMeasurementMap[selectedProductName] || [];
 
-const hasRequiredMeasurements =
-  selectedMeasurements &&
-  fields.some(k => {
-    const v = selectedMeasurements[k];
-    return v !== null && v !== "" && v !== undefined;
-  });
+      const hasRequiredMeasurements =
+        selectedMeasurements &&
+        fields.some(k => {
+          const v = selectedMeasurements[k];
+          return v !== null && v !== "" && v !== undefined;
+        });
 
-if (!hasRequiredMeasurements) {
-  showToast("Please add measurements before placing order.", true);
-  return;
-}
+      if (!hasRequiredMeasurements) {
+        showToast("Please add measurements before placing order.", true);
+        return;
+      }
 
       const phone = localStorage.getItem("userPhone");
       const product = products[selectedProductName];
@@ -1153,26 +1199,26 @@ if (!hasRequiredMeasurements) {
       };
 
       fetch("http://localhost:8080/api/orders", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        phone,
-        product: order.product,
-        image: order.image,
-        fabric: order.fabric,
-        color: order.color,
-        measurements: JSON.stringify(order.measurements),
-        time: order.time
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          phone,
+          product: order.product,
+          image: order.image,
+          fabric: order.fabric,
+          color: order.color,
+          measurements: JSON.stringify(order.measurements),
+          time: order.time
+        })
       })
-    })
-    .then(() => {
-     showToast("Order placed successfully 🎉", false);
-    })
-    .catch(() => {
-    showToast("Order failed", true);
-    });
+        .then(() => {
+          showToast("Order placed successfully 🎉", false);
+        })
+        .catch(() => {
+          showToast("Order failed", true);
+        });
 
       const design = {
         template: order.product,
@@ -1225,7 +1271,7 @@ if (!hasRequiredMeasurements) {
             } else {
               document.querySelector(".primary-btn")?.focus();
             }
-         }
+          }
         });
       });
     }
@@ -1234,11 +1280,11 @@ if (!hasRequiredMeasurements) {
       fetch(`http://localhost:8080/api/measurement/${id}`, {
         method: "DELETE"
       })
-      .then(() => {
-        showToast("Deleted successfully", false);
-        importMeasurements();
-      })
-      .catch(() => showToast("Delete failed", true));
+        .then(() => {
+          showToast("Deleted successfully", false);
+          importMeasurements();
+        })
+        .catch(() => showToast("Delete failed", true));
     }
 
     document.getElementById("openMeasurementBtn").addEventListener("click", openMeasurementModal);
@@ -1264,4 +1310,5 @@ if (!hasRequiredMeasurements) {
     initAccordion();
   </script>
 </body>
+
 </html>

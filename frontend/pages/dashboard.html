@@ -613,7 +613,7 @@ dashboard
 
         templates.forEach((t) => {
           container.innerHTML += `
-            <div class="template-card" onclick="newDesignWithTemplate('${t.name}', '${t.img}')">
+            <div class="template-card" onclick="selectCategory('${t.name}')">
               <img src="${t.img}" alt="${t.name}">
               <p>${t.name}</p>
             </div>`;
@@ -621,7 +621,14 @@ dashboard
       }
 
       function selectCategory(name) {
-        localStorage.setItem("selectedCategory", name);
+        let category = name.toLowerCase();
+
+        if (category.includes("ethnic")) category = "ethnic";
+        else if (category.includes("casual")) category = "casual";
+        else if (category.includes("party")) category = "party";
+        else if (category.includes("traditional")) category = "traditional";
+
+        localStorage.setItem("selectedCategory", category);
         window.location.href = "studio.html";
       }
 
@@ -714,14 +721,14 @@ dashboard
         location.href = "../settings.html";
       }
 
-      function newDesignWithTemplate(name, img) {
-        localStorage.setItem("selectedProduct", JSON.stringify({
-        name: name,
-        img: img
-      }));
+      // function newDesignWithTemplate(name, img) {
+      //   localStorage.setItem("selectedProduct", JSON.stringify({
+      //   name: name,
+      //   img: img
+      // }));
 
-  window.location.href = "studio.html";
-  }
+  // window.location.href = "studio.html";
+  // }
 
       window.onload = loadTemplates;
     </script>
